@@ -13,7 +13,7 @@ public class ElectronicsOrder extends Order {
     @Override
     public void validateOrder() {
         if (isCityValidFrom() && isCityValidTo() &&
-                (getTotalPrice() > 100) &&
+                (getTotalPrice() >= 100) &&
                 (getCustomerOwned().getGender().equals("Женский"))){
             setDateConfirmed(new Date());
         }

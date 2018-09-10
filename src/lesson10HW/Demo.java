@@ -12,9 +12,9 @@ public class Demo {
         Order[] orders = new Order[4];
 
         orders[0] = new ElectronicsOrder("Something", new Date(),
-                "Киев", "Одесса", 200, customer, 12);
+                "Киев", "Киев", 200, customer, 12);
         orders[1] = new ElectronicsOrder("Something else", new Date(),
-                "Киев", "Днепр", 500, customer1, 12);
+                "Киев", "Днепр", 100, customer1, 12);
 
         orders[2] = new FurnitureOrder("Something furniture", new Date(),
                 "Киев", "Винница", 1000, customer, "2");
