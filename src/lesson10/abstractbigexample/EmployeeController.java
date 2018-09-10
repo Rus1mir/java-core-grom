@@ -1,6 +1,6 @@
 package lesson10.abstractbigexample;
 
-public class EmpoyeeController {
+public class EmployeeController {
     private Employee[] employees = new Employee[100];
 
     void paySalaryToEmployees() {

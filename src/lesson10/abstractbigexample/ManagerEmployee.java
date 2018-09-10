@@ -1,6 +1,6 @@
 package lesson10.abstractbigexample;
 
-public class managerEmployee extends Employee {
+public class ManagerEmployee extends Employee {
 
     @Override
     void paySalary() {
