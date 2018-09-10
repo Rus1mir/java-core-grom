@@ -12,14 +12,14 @@ public class Demo {
         Order[] orders = new Order[4];
 
         orders[0] = new ElectronicsOrder("Something", new Date(),
-                "Киев", "Одесса", 200, customer);
+                "Киев", "Одесса", 200, customer, 12);
         orders[1] = new ElectronicsOrder("Something else", new Date(),
-                "Киев", "Днепр", 500, customer1);
+                "Киев", "Днепр", 500, customer1, 12);
 
         orders[2] = new FurnitureOrder("Something furniture", new Date(),
-                "Киев", "Винница", 1000, customer);
+                "Киев", "Винница", 1000, customer, "2");
         orders[3] = new FurnitureOrder("Something else details", new Date(),
-                "Киев", "Ташкент", 800, customer1);
+                "Киев", "Ташкент", 800, customer1, "12");
 
         for (Order order : orders) {
             processOrder(order);
