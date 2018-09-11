@@ -41,9 +41,9 @@ public class ElectronicsOrder extends Order {
 
     @Override
     public void calculatePrice() {
-        double priceWithShipping = calcShippingCost() + (double) getBasePrice();
+        double priceWithShipping = calcShippingCost() + getBasePrice();
         if (priceWithShipping > 1000) {
-            priceWithShipping -= (double) getBasePrice() * 0.05;
+            priceWithShipping -= priceWithShipping * 0.05;
         }
         setTotalPrice(priceWithShipping);
     }
