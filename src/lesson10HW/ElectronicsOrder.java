@@ -13,8 +13,9 @@ public class ElectronicsOrder extends Order {
     @Override
     public void validateOrder() {
         if (isCityValidFrom() && isCityValidTo() &&
-                (getTotalPrice() >= 100) &&
-                (getCustomerOwned().getGender().equals("Женский"))){
+                (getBasePrice() + calcShippingCost()  >= 100) &&
+                (getCustomerOwned().getName() != null) &&
+                (getCustomerOwned().getGender().equals("Женский"))) {
             setDateConfirmed(new Date());
         }
     }
@@ -40,19 +41,17 @@ public class ElectronicsOrder extends Order {
 
     @Override
     public void calculatePrice() {
-        double priceWithShipping = calcShippingCost() + (double)getBasePrice() ;
+        double priceWithShipping = calcShippingCost() + (double) getBasePrice();
         if (priceWithShipping > 1000) {
-            priceWithShipping -= (double)getBasePrice() * 0.05;
+            priceWithShipping -= (double) getBasePrice() * 0.05;
         }
         setTotalPrice(priceWithShipping);
     }
 
     private double calcShippingCost() {
         if (getShipToCity().equals("Киев") || getShipToCity().equals("Одесса")) {
-            return (double)getBasePrice()*0.1;
+            return (double) getBasePrice() * 0.1;
         }
-        return (double)getBasePrice()*0.15;
+        return (double) getBasePrice() * 0.15;
     }
-
-
 }

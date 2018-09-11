@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class Demo {
     public static void main(String[] args) {
-        Customer customer = new Customer("Test", "Киев", "Мужской");
+        Customer customer = new Customer("Тест", "Киев", "Мужской");
         Customer customer1 = new Customer("Натали", "Киев", "Женский");
 
         Order[] orders = new Order[4];
