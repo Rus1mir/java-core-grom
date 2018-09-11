@@ -12,7 +12,7 @@ public class FurnitureOrder extends Order {
 
     @Override
     public void validateOrder() {
-        if (isCityValidFrom() && (getTotalPrice() >= 500) &&
+        if (isCityValidFrom() && (getBasePrice() + calcShippingCost() >= 500) &&
                 (!getCustomerOwned().getName().equals("Тест"))) {
             setDateConfirmed(new Date());
         }
