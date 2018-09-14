@@ -1,6 +1,4 @@
-package lesson10HW;
-
-import com.sun.org.apache.xpath.internal.operations.Or;
+package lesson10hw;
 
 import java.util.Date;
 

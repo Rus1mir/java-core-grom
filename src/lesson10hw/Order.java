@@ -1,4 +1,4 @@
-package lesson10HW;
+package lesson10hw;
 
 import java.util.Date;
 

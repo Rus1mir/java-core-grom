@@ -1,4 +1,4 @@
-package lesson10HW;
+package lesson10hw;
 
 public class Customer {
     private String name;
