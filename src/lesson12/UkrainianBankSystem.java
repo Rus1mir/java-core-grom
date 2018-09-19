@@ -1,5 +1,7 @@
 package lesson12;
 
+import javax.jws.soap.SOAPBinding;
+
 public class UkrainianBankSystem implements BankSystem {
     @Override
     public void withdraw(User user, int amount) {
@@ -24,9 +26,9 @@ public class UkrainianBankSystem implements BankSystem {
     public void transferMoney(User fromUser, User toUser, int amount) {
         //проверить возможность снятия и пополнения
         //снять у отправителя пополнить получателя
-        if (!checkWithdraw(fromUser, amount))
-            return;
-        if (!checkFundingLimits(toUser, amount))
+        if (!checkCurrencyMatch(fromUser, toUser) ||
+                !checkWithdraw(fromUser, amount) ||
+                !checkFundingLimits(toUser, amount))
             return;
         withdraw(fromUser, amount);
         fund(toUser, amount);
@@ -58,6 +60,13 @@ public class UkrainianBankSystem implements BankSystem {
     private boolean checkWithdrawLimits(User user, int amount, double limit) {
         if (amount + user.getBank().getCommission(amount) * amount > limit) {
             printWithdrawalErrMsg(amount, user);
+            return false;
+        }
+        return true;
+    }
+
+    private boolean checkCurrencyMatch(User user1, User user2) {
+        if (user1.getBank().getCurrency() != user2.getBank().getCurrency()) {
             return false;
         }
         return true;
