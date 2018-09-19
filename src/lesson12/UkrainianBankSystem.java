@@ -24,7 +24,7 @@ public class UkrainianBankSystem implements BankSystem {
     public void transferMoney(User fromUser, User toUser, int amount) {
         //проверить возможность снятия и пополнения
         //снять у отправителя пополнить получателя
-        if (!checkFundingLimits(toUser, amount) || !checkWithdraw(fromUser, amount))
+        if (!(checkFundingLimits(toUser, amount) && checkWithdraw(fromUser, amount)))
             return;
         withdraw(fromUser, amount);
         fund(toUser, amount);
