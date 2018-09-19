@@ -14,19 +14,22 @@ public class Controller {
      Который используя все реализации интерфейса API, находит комнаты по заданным параметрам
     */
     public Room[] requestRooms(int price, int persons, String city, String hotel) {
-        Room[] foundRooms = new Room[0];
+        int foundRoomsCount = 0;
         for (API api : apis) {
             if (api != null) {
-                foundRooms = concat(foundRooms, getRoomsFromApi(api, price, persons, city, hotel));
+                foundRoomsCount += api.findRooms(price, persons, city, hotel).length;
+            }
+        }
+        Room[] foundRooms = new Room[foundRoomsCount];
+        foundRoomsCount = 0;
+        for (API api : apis) {
+            if (api != null) {
+                for (Room room : api.findRooms(price, persons, city, hotel)) {
+                    foundRooms[foundRoomsCount++] = room;
+                }
             }
         }
         return foundRooms;
-    }
-
-    public static <T> T[] concat(T[] first, T[] second) {
-        T[] result = Arrays.copyOf(first, first.length + second.length);
-        System.arraycopy(second, 0, result, first.length, second.length);
-        return result;
     }
 
     private Room[] getRoomsFromApi(API api, int price, int persons, String city, String hotel) {
@@ -40,39 +43,39 @@ public class Controller {
      Гарантируется что id комнаты уникальный во всей системе
     */
     public Room[] check(API api1, API api2) {
-        Room[] rooms1 = api1.getAll();
-        Room[] rooms2 = api2.getAll();
-        Room[] resultRoomsTemp = new Room[rooms1.length + rooms2.length];
-        int index = 0;
-        for (int i = 0; i < rooms1.length; i++) {
-            boolean firstEntry = true;
-            for (int j = 0; j < rooms2.length; j++) {
-                if (isRoomsLike(rooms1[i], rooms2[j])) {
-                    if (firstEntry) {
-                        resultRoomsTemp[index] = rooms1[i];
-                        firstEntry = false;
-                        index++;
+        boolean[] mask = new boolean[api2.getAll().length];
+        int count = 0;
+        for (int i = 0; i < api1.getAll().length; i++) {
+            for (int j = 0; j < api2.getAll().length; j++) {
+                if (!mask[j]) {
+                    if (isRoomsEqual(api1.getAll()[i], api2.getAll()[j])) {
+                        mask[j] = true;
+                        count++;
+                        break;
                     }
-                    rooms2[j] = null;
                 }
             }
         }
-        Room[] resultRooms = new Room[index];
-        index = 0;
-        for (Room room : resultRoomsTemp) {
-            if (room != null) {
-                resultRooms[index] = room;
-                index++;
+        mask = new boolean[api2.getAll().length];
+        Room[] resultRooms = new Room[count];
+        for (int i = 0, n = 0; i < api1.getAll().length; i++) {
+            for (int j = 0; j < api2.getAll().length; j++) {
+                if (!mask[j]) {
+                    if (isRoomsEqual(api1.getAll()[i], api2.getAll()[j])) {
+                        mask[j] = true;
+                        resultRooms[n++] = api1.getAll()[i];
+                        break;
+                    }
+                }
             }
         }
         return resultRooms;
     }
 
-    private boolean isRoomsLike(Room room1, Room room2) {
-        if ((room1 == null) || (room2 == null)) return false;
-        return ((room1.getPersons() == room2.getPersons()) &&
-                room1.getHotelFamily().equals(room2.getHotelFamily()) &&
+    private boolean isRoomsEqual(Room room1, Room room2) {
+        return (room1.getPersons() == room2.getPersons() &&
+                room1.getHotelName().equals(room2.getHotelName()) &&
                 room1.getCityName().equals(room2.getCityName()) &&
-                (room1.getPrice() == room2.getPrice()));
+                room1.getPrice() == room2.getPrice());
     }
 }

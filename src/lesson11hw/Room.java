@@ -7,15 +7,15 @@ public class Room {
     private int price;
     private int persons;
     private Date dateAvailableFrom;
-    private String hotelFamily;
+    private String hotelName;
     private String cityName;
 
-    public Room(long id, int price, int persons, Date dateAvailableFrom, String hotelFamily, String cityName) {
+    public Room(long id, int price, int persons, Date dateAvailableFrom, String hotelName, String cityName) {
         this.id = id;
         this.price = price;
         this.persons = persons;
         this.dateAvailableFrom = dateAvailableFrom;
-        this.hotelFamily = hotelFamily;
+        this.hotelName = hotelName;
         this.cityName = cityName;
     }
 
@@ -35,8 +35,8 @@ public class Room {
         return dateAvailableFrom;
     }
 
-    public String getHotelFamily() {
-        return hotelFamily;
+    public String getHotelName() {
+        return hotelName;
     }
 
     public String getCityName() {

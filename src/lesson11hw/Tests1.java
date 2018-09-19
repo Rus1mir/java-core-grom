@@ -69,7 +69,7 @@ public class Tests1 {
     private static boolean isRoomsEquals(Room room1, Room room2) {
         if ((room1 == null) || (room2 == null)) return false;
         return ((room1.getPersons() == room2.getPersons()) &&
-                room1.getHotelFamily().equals(room2.getHotelFamily()) &&
+                room1.getHotelName().equals(room2.getHotelName()) &&
                 room1.getCityName().equals(room2.getCityName()) &&
                 (room1.getPrice() == room2.getPrice()));
     }

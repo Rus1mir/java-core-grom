@@ -1,9 +1,9 @@
 package lesson11hw;
 
-public class BookingComApi implements API {
+public class BookingComAPI implements API {
     private Room[] rooms;
 
-    public BookingComApi(Room[] rooms) {
+    public BookingComAPI(Room[] rooms) {
         this.rooms = rooms;
     }
 
@@ -21,7 +21,7 @@ public class BookingComApi implements API {
                     && isPriceInRange(price, priceRange, room.getPrice())
                     && (room.getPersons() == persons)
                     && (room.getCityName().equals(city))
-                    && (room.getHotelFamily().equals(hotel))) {
+                    && (room.getHotelName().equals(hotel))) {
                 foundRoomsTemp[foundCount] = room;
                 foundCount++;
             }

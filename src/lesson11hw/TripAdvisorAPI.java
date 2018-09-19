@@ -22,7 +22,7 @@ public class TripAdvisorAPI implements API {
                     && (room.getPrice() == price)
                     && (isPersonsNumberInRange(persons, personsRange, room.getPersons()))
                     && (room.getCityName().equals(city))
-                    && (room.getHotelFamily().equals(hotel))) {
+                    && (room.getHotelName().equals(hotel))) {
                 foundRoomsTemp[foundCount] = room;
                 foundCount++;
             }

@@ -18,7 +18,7 @@ public class GoogleAPI implements API {
                     && (room.getPrice() == price)
                     && (room.getPersons() == persons)
                     && (room.getCityName().equals(city))
-                    && (room.getHotelFamily().equals(hotel))) {
+                    && (room.getHotelName().equals(hotel))) {
                 foundRoomsTemp[foundCount] = room;
                 foundCount++;
             }
