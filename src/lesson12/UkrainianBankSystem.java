@@ -24,7 +24,7 @@ public class UkrainianBankSystem implements BankSystem {
     public void transferMoney(User fromUser, User toUser, int amount) {
         //проверить возможность снятия и пополнения
         //снять у отправителя пополнить получателя
-        if (!checkFundingLimits(toUser, amount) && !checkWithdraw(fromUser, amount))
+        if (!checkFundingLimits(toUser, amount) || !checkWithdraw(fromUser, amount))
             return;
         withdraw(fromUser, amount);
         fund(toUser, amount);
@@ -34,7 +34,7 @@ public class UkrainianBankSystem implements BankSystem {
     public void paySalary(User user) {
         //проверить возможность пополнения у сотрудника
         //выплатить зарплату пополнением
-        if (checkFundingLimits(user, user.getSalary()))
+        if (!checkFundingLimits(user, user.getSalary()))
             return;
         fund(user, user.getSalary());
     }
