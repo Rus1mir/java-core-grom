@@ -22,10 +22,10 @@ public class Main {
         BankSystem bankSystem = new UkrainianBankSystem();
 
         for (User user : users) {
-            bankSystem.withdraw(user, 100);
+            //bankSystem.withdraw(user, 100);
             bankSystem.fund(user, 100);
-            bankSystem.paySalary(user);
-            bankSystem.transferMoney(user, users[0], 5);
+            // bankSystem.paySalary(user);
+            //bankSystem.transferMoney(user, users[0], 5);
             printUser(user);
         }
     }
