@@ -24,6 +24,7 @@ public class UkrainianBankSystem implements BankSystem {
 
     @Override
     public void transferMoney(User fromUser, User toUser, int amount) {
+        //проверить совпадает ли валюта
         //проверить возможность снятия и пополнения
         //снять у отправителя пополнить получателя
         if (!checkCurrencyMatch(fromUser, toUser) ||

@@ -60,7 +60,7 @@ public class UserRepository {
 
     public User getUserByName(String name) {
         for (User user : getNotEmptyUsers()) {
-            if (user.getName() == name)
+            if (user.getName().equals(name))
                 return user;
         }
         return null;
@@ -76,7 +76,7 @@ public class UserRepository {
 
     public User getUserBySessionId(String sessionId) {
         for (User user : getNotEmptyUsers()) {
-            if (user.getSessionId() == sessionId)
+            if (user.getSessionId().equals(sessionId))
                 return user;
         }
         return null;
@@ -91,7 +91,9 @@ public class UserRepository {
     }
 
     public User save(User user) {
-        if ((getNotEmptyUsersCount() < users.length) && (findById(user.getId()) == null)) {
+        if ((user != null) &&
+                (getNotEmptyUsersCount() < users.length) &&
+                (findById(user.getId()) == null)) {
             for (int i = 0; i < users.length; i++) {
                 if (users[i] == null) {
                     users[i] = user;
@@ -114,6 +116,7 @@ public class UserRepository {
     }
 
     public User update(User user) {
+        if (user == null) return null;
         int userIndex = getIndexUserById(user.getId());
         if (userIndex >= 0) {
             users[userIndex] = user;

@@ -54,4 +54,5 @@ public class ElectronicsOrder extends Order {
         }
         return (double) getBasePrice() * 0.15;
     }
+
 }
