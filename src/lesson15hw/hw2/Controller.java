@@ -32,10 +32,6 @@ public class Controller {
         return foundRooms;
     }
 
-    private Room[] getRoomsFromApi(API api, int price, int persons, String city, String hotel) {
-        return api.findRooms(price, persons, city, hotel);
-    }
-
     /*
      Room[] check(API api1, API api2)
      Который находит общие комнаты у двух API (в результирующий массив добавлять комнаты с api1).

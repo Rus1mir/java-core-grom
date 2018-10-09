@@ -12,18 +12,20 @@ public class GoogleAPI implements API {
     //ищет сторого по заданным параметрам
     @Override
     public Room[] findRooms(int price, int persons, String city, String hotel) {
-        Room[] foundRoomsTemp = new Room[rooms.length];
         Room sampleRoom = new Room(-1, price, persons, new Date(), hotel, city);
         int foundCount = 0;
         for (Room room : rooms) {
-            if ((room != null) && (room.equals(sampleRoom))) {
-                foundRoomsTemp[foundCount] = room;
+            if (sampleRoom.equals(room)) {
                 foundCount++;
             }
         }
         Room[] foundRooms = new Room[foundCount];
-        for (int i = 0; i < foundCount; i++) {
-            foundRooms[i] = foundRoomsTemp[i];
+        foundCount = 0;
+        for (Room room : rooms) {
+            if (sampleRoom.equals(room)) {
+                foundRooms[foundCount] = room;
+                foundCount++;
+            }
         }
         return foundRooms;
     }
