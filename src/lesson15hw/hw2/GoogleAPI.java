@@ -16,7 +16,7 @@ public class GoogleAPI implements API {
         Room sampleRoom = new Room(-1, price, persons, new Date(), hotel, city);
         int foundCount = 0;
         for (Room room : rooms) {
-            if (sampleRoom.equals(room)) {
+            if ((room != null) && (room.equals(sampleRoom))) {
                 foundRoomsTemp[foundCount] = room;
                 foundCount++;
             }
