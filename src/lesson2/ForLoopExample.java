@@ -1,4 +1,4 @@
-package lesson1_2;
+package lesson2;
 
 public class ForLoopExample {
     public static void main(String[] args) {
