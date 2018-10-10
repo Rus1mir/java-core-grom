@@ -1,4 +1,4 @@
-package lesson15hw1.hw1;
+package lesson15hw.hw1;
 // Создайте класс User c полями:
 // long id
 // String name

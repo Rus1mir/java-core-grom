@@ -1,4 +1,4 @@
-package lesson15hw1.hw2;
+package lesson15hw.hw2;
 //Controller класс, который содержит поле API[] apis,инициализируется в конструкторе, и два общедоступных метода
 
 public class Controller {
