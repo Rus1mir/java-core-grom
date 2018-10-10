@@ -1,4 +1,4 @@
-package lesson15hw.hw1;
+package lesson15hw1.hw1;
 // Так же создайте класс UserRepository, который будет содержать поле
 // User[] users, выполняющее роль условной базы данных. Поле инициализируется в конструкторе.
 // Возможность модификации поля из других классов должна быть закрыта, но возможность чтения открыта
@@ -9,8 +9,6 @@ package lesson15hw.hw1;
 // Если юзера нет, результат метода null
 // void delete(long id) - удаляет юзера с массива
 // findUser(User user) - нахождение юзера в условной базе данных
-
-import lesson15hw.hw1.User;
 
 public class UserRepository {
 

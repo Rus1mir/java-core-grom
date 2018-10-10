@@ -1,4 +1,4 @@
-package lesson15hw.hw2;
+package lesson15hw1.hw2;
 
 public interface API {
 

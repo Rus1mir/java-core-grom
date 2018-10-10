@@ -1,7 +1,5 @@
-package lesson15hw.hw2;
+package lesson15hw1.hw2;
 //Controller класс, который содержит поле API[] apis,инициализируется в конструкторе, и два общедоступных метода
-
-import java.util.Arrays;
 
 public class Controller {
     API[] apis;
