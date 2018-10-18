@@ -122,8 +122,8 @@ public class Solution {
         } else {
             return false;
         }
-        //if (temp.startsWith("www."))
-        //temp = temp.substring(3);
+        if (temp.startsWith("www."))
+            temp = temp.substring(3);
         if (temp.indexOf(".com") != -1) {
             temp = temp.substring(0, temp.indexOf(".com"));
         } else if (temp.indexOf(".org") != -1) {
@@ -137,6 +137,13 @@ public class Solution {
             return false;
         for (char symbol : temp.toCharArray()) {
             if (!Character.isLetter(symbol) && !Character.isDigit(symbol))
+                return false;
+        }
+        temp = address.substring(address.indexOf('.') + 1);
+        for (char symbol : temp.toCharArray()) {
+            if (!Character.isLetter(symbol) &&
+                    !Character.isDigit(symbol) &&
+                    symbol != '/')
                 return false;
         }
         return true;
