@@ -112,20 +112,17 @@ public class Solution {
     //другие точки в названии адреса а так же спецчимволы не допускаются. Название класса - Solution
 
     public static boolean validate(String address) {
-        String[] parts = address.replace("www.", "").split("://|\\.");
-        if (parts.length < 3)
-            return false;
-        boolean rez = (parts[0].equals("http") || parts[0].equals("https")) &&
-                validateStr(parts[1]) &&
-                (parts[2].startsWith("com") || parts[2].startsWith("org") || parts[2].startsWith("net"));
-        return rez;
-    }
+        address.replace(".www", "");
+        String[][] conditions = new String[][]{{"http://", "https://"}, {".com", ".org", ".net"}};
 
-    private static boolean validateStr(String input) {
-        for (char symb : input.toCharArray()) {
-            if (!Character.isDigit(symb) &&
-                    !Character.isLetter(symb))
-                return false;
+        boolean res = true;
+        for (String[] con : conditions) {
+            boolean xres = false;
+            for (String cond : con) {
+                xres |= address.contains(cond);
+                address = address.replace(cond, "");
+            }
+            res &= xres;
         }
         return true;
     }
