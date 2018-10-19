@@ -15,7 +15,7 @@ public class Solution {
 
     public static boolean validate(String address) {
         address.replace(".www", "");
-        String[] parts = address.split("://|\\.|\\/");
+        String[] parts = address.split("://|\\.");
         if (parts.length < 3)
             return false;
         boolean res = true;
