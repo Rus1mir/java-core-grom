@@ -7,7 +7,7 @@ public class Solution {
         System.out.println(minWord(test));
         System.out.println(maxWord(test));
         System.out.println(mostCountedWord(test));
-        test = "        ";
+        test = "https://gromcode.com/lesson5";
         System.out.println(validate(test));
     }
     //Напишите метод countWords для подсчета слов во входящем стринге.
@@ -117,7 +117,7 @@ public class Solution {
             return false;
         boolean rez = (parts[0].equals("http") || parts[0].equals("https")) &&
                 validateStr(parts[1]) &&
-                (parts[2].equals("com") || parts[2].equals("org") || parts[2].equals("net"));
+                (parts[2].startsWith("com") || parts[2].startsWith("org") || parts[2].startsWith("net"));
         return rez;
     }
 
