@@ -1,7 +1,5 @@
 package lesson17HW;
 
-import java.util.Arrays;
-
 public class Solution {
     public static void main(String[] args) {
         String test = "   we go to school now we 34 now now we we we";
@@ -9,7 +7,7 @@ public class Solution {
         System.out.println(minWord(test));
         System.out.println(maxWord(test));
         System.out.println(mostCountedWord(test));
-        test = "https://gromcode.com";
+        test = "        ";
         System.out.println(validate(test));
     }
     //Напишите метод countWords для подсчета слов во входящем стринге.
@@ -114,36 +112,19 @@ public class Solution {
     //другие точки в названии адреса а так же спецчимволы не допускаются. Название класса - Solution
 
     public static boolean validate(String address) {
-        String temp = address;
-        if (address.startsWith("http://")) {
-            temp = temp.substring(7);
-        } else if (address.startsWith("https://")) {
-            temp = temp.substring(8);
-        } else {
+        String[] parts = address.replace("www.", "").split("://|\\.");
+        if (parts.length < 3)
             return false;
-        }
-        if (temp.startsWith("www."))
-            temp = temp.substring(3);
-        if (temp.indexOf(".com") != -1) {
-            temp = temp.substring(0, temp.indexOf(".com"));
-        } else if (temp.indexOf(".org") != -1) {
-            temp = temp.substring(0, temp.indexOf(".org"));
-        } else if (temp.indexOf(".net") != -1) {
-            temp = temp.substring(0, temp.indexOf(".net"));
-        } else {
-            return false;
-        }
-        if (temp.length() == 0)
-            return false;
-        for (char symbol : temp.toCharArray()) {
-            if (!Character.isLetter(symbol) && !Character.isDigit(symbol))
-                return false;
-        }
-        temp = address.substring(address.indexOf('.') + 1);
-        for (char symbol : temp.toCharArray()) {
-            if (!Character.isLetter(symbol) &&
-                    !Character.isDigit(symbol) &&
-                    symbol != '/')
+        boolean rez = (parts[0].equals("http") || parts[0].equals("https")) &&
+                validateStr(parts[1]) &&
+                (parts[2].equals("com") || parts[2].equals("org") || parts[2].equals("net"));
+        return rez;
+    }
+
+    private static boolean validateStr(String input) {
+        for (char symb : input.toCharArray()) {
+            if (!Character.isDigit(symb) &&
+                    !Character.isLetter(symb))
                 return false;
         }
         return true;
