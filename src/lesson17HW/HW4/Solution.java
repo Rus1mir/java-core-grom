@@ -15,7 +15,7 @@ public class Solution {
 
     public static boolean validate(String address) {
         address = address.replace(".www", "");
-        String[] parts = address.split("://|\\.");
+        String[] parts = address.split("://|\\.|\\/");
         if (parts.length < 3)
             return false;
         boolean res = true;
@@ -27,7 +27,7 @@ public class Solution {
 
     private static boolean validateCond(String input, String[] conditions) {
         for (String cond : conditions) {
-            if (input.contains(cond))
+            if (input.equals(cond))
                 return true;
         }
         return false;
