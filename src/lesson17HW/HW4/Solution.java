@@ -19,9 +19,9 @@ public class Solution {
         if (parts.length < 3)
             return false;
         boolean res = true;
-        res &= validateCond(parts[0], new String[]{"http", "https"});
-        res &= validateStr(parts[1]);
-        res &= validateCond(parts[2], new String[]{"com", "org", "net"});
+        res = res && validateCond(parts[0], new String[]{"http", "https"});
+        res = res && validateStr(parts[1]);
+        res = res && validateCond(parts[2], new String[]{"com", "org", "net"});
         return res;
     }
 
