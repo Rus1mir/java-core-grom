@@ -1,4 +1,4 @@
-package lesson17HW.HW2;
+package lesson17hw.hw2;
 
 public class Solution {
     public static void main(String[] args) {
