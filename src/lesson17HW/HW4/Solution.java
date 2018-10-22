@@ -14,7 +14,7 @@ public class Solution {
     //другие точки в названии адреса а так же спецчимволы не допускаются. Название класса - Solution
 
     public static boolean validate(String address) {
-        address = address.replace(".www", "");
+        address = address.replace("www.", "");
         String[] parts = address.split("://|\\.|\\/");
         if (parts.length < 3)
             return false;
