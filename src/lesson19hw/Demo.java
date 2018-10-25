@@ -12,7 +12,7 @@ public class Demo {
 
     static void testPut() {
         // Simple put
-        Storage storage = new Storage(1001, 10, new String[]{"pic", "music", "text"}, "USA", 100);
+        Storage storage = new Storage(1001, new File[10], new String[]{"pic", "music", "text"}, "USA", 100);
         File file = new File(12, "pretty", "pic", 20);
         Controller controller = new Controller();
         controller.put(storage, file);
@@ -69,7 +69,7 @@ public class Demo {
     static void testDelete() {
 
         // Delete from empty
-        Storage storage = new Storage(1001, 10, new String[]{"pic", "music", "text"}, "USA", 100);
+        Storage storage = new Storage(1001, new File[10], new String[]{"pic", "music", "text"}, "USA", 100);
         File file = new File(12, "pretty", "pic", 20);
         Controller controller = new Controller();
 
@@ -118,8 +118,8 @@ public class Demo {
     static void testTransfer() {
 
         // Normally transfer
-        Storage storage1 = new Storage(1001, 10, new String[]{"pic", "music", "text"}, "USA", 100);
-        Storage storage2 = new Storage(1005, 10, new String[]{"pic", "music", "text"}, "USA", 100);
+        Storage storage1 = new Storage(1001, new File[10], new String[]{"pic", "music", "text"}, "USA", 100);
+        Storage storage2 = new Storage(1005, new File[10], new String[]{"pic", "music", "text"}, "USA", 100);
         Controller controller = new Controller();
 
         for (int i = 0; i < 10; i++) {
@@ -146,7 +146,7 @@ public class Demo {
         System.out.println(Arrays.deepToString(storage2.getFiles()));
 
         // No free space (oversize)
-        Storage storage3 = new Storage(1007, 11, new String[]{"pic", "music", "text"}, "USA", 20);
+        Storage storage3 = new Storage(1007, new File[11], new String[]{"pic", "music", "text"}, "USA", 20);
 
         try {
             controller.transferAll(storage2, storage3);
@@ -167,7 +167,7 @@ public class Demo {
         }
 
         // Wrong format
-        Storage storage4 = new Storage(1012, 5, new String[]{"pic", "music", "text", "some"}, "USA", 120);
+        Storage storage4 = new Storage(1012, new File[5], new String[]{"pic", "music", "text", "some"}, "USA", 120);
         controller.put(storage4, new File(234, "wrong", "some", 1));
         System.out.println(Arrays.deepToString(storage4.getFiles()));
 
@@ -181,8 +181,8 @@ public class Demo {
     static void testTransferById() {
 
         // Normally transfer by id
-        Storage storage1 = new Storage(1001, 10, new String[]{"pic", "music", "text"}, "USA", 100);
-        Storage storage2 = new Storage(1002, 10, new String[]{"pic", "music", "text"}, "USA", 100);
+        Storage storage1 = new Storage(1001, new File[10], new String[]{"pic", "music", "text"}, "USA", 100);
+        Storage storage2 = new Storage(1002, new File[10], new String[]{"pic", "music", "text"}, "USA", 100);
 
         Controller controller = new Controller();
 

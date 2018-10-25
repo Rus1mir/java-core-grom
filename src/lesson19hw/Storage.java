@@ -7,12 +7,12 @@ public class Storage {
     private String storageCountry;
     private long storageSize;
 
-    public Storage(long id, int capacity, String[] formatsSupported, String storageCountry, long storageSize) {
+    public Storage(long id, File[] files, String[] formatsSupported, String storageCountry, long storageSize) {
         this.id = id;
         this.formatsSupported = formatsSupported;
         this.storageCountry = storageCountry;
         this.storageSize = storageSize;
-        this.files = new File[capacity];
+        this.files = files;
     }
 
     public long getId() {
