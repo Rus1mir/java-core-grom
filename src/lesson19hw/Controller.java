@@ -1,7 +1,7 @@
 package lesson19hw;
 
 public class Controller {
-    public void put(Storage storage, File file) {
+    public File put(Storage storage, File file) {
 
         if (freeCellsCount(storage) == 0)
             throw new RuntimeException("Place file id " + file.getId() +
@@ -29,9 +29,10 @@ public class Controller {
             if (files[i] == null) {
                 files[i] = file;
                 storage.setFiles(files);
-                return;
+                return file;
             }
         }
+        return null;
     }
 
     public void delete(Storage storage, File file) {
@@ -41,7 +42,7 @@ public class Controller {
         for (int i = 0; i < files.length; i++) {
             if (files[i] != null &&
                     file != null &&
-                    files[i].equals(file)) {
+                    files[i].getId() == file.getId()) {
                 files[i] = null;
                 storage.setFiles(files);
                 return;
