@@ -39,8 +39,8 @@ public class Controller {
         File[] files = storage.getFiles();
 
         for (int i = 0; i < files.length; i++) {
-            if ((files[i] != null) &&
-                    (files[i]).equals(file)) {
+            if (files[i] != null &&
+                    files[i].getId() == file.getId()) {
                 files[i] = null;
                 storage.setFiles(files);
                 return;
