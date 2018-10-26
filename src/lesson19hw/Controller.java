@@ -2,31 +2,28 @@ package lesson19hw;
 
 public class Controller {
     public void put(Storage storage, File file) throws Exception {
-        if (file == null && storage == null)
-            throw new IllegalArgumentException("Arguments are null");
+
+        if (freeCellsCount(storage) == 0)
+            throw new Exception("Place file id " + file.getId() +
+                    " filed, cause no free cells in storage id " + storage.getId());
+
+        if (freeSpaceCalc(storage) < file.getSize())
+            throw new Exception("Place file id " + file.getId() +
+                    " filed, cause free space in storage id " + storage.getId() + " is not enough");
+
+        if (getFileById(file.getId(), storage) != null)
+            throw new Exception("Place file id " + file.getId() +
+                    " filed, cause file with same id is already exist in storage id " + storage.getId());
+
+        if (!isFileNameValid(file))
+            throw new Exception("Place file id " + file.getId() +
+                    " filed, cause file with id " + file.getId() + " has too large name");
+
+        if (!isFileFormatSupported(file, storage))
+            throw new Exception("Place file id " + file.getId() +
+                    " filed, cause file with id " + file.getId() + " has unsupported format for storage id " + storage.getId());
 
         File[] files = storage.getFiles();
-
-        boolean bool = true;
-        for (String format : storage.getFormatsSupported()) {
-            bool = bool && !file.getFormat().equals(format);
-        }
-        if (bool)
-            throw new Exception ("Filed to put file id " + file.getId() +
-                    " cause no format support for storage id " + storage.getId());
-
-        long space = storage.getStorageSize();
-        for (File f : files) {
-            if (f != null) {
-                space = space - f.getSize();
-                if (f.getId() == file.getId())
-                    throw new RuntimeException("Filed to put file id " + file.getId() +
-                            " cause file with same id is already exist in storage id " + storage.getId());
-            }
-        }
-        if (space < file.getSize())
-            throw new Exception("Filed to put file id " + file.getId() +
-                    " cause no free space in storage id " + storage.getId());
 
         for (int i = 0; i < files.length; i++) {
             if (files[i] == null) {
@@ -35,8 +32,6 @@ public class Controller {
                 return;
             }
         }
-        throw new Exception("Filed to put file id " + file.getId() +
-                " cause no free cells in storage id " + storage.getId());
     }
 
     public void delete(Storage storage, File file) {
@@ -44,8 +39,8 @@ public class Controller {
         File[] files = storage.getFiles();
 
         for (int i = 0; i < files.length; i++) {
-            if (files[i] != null &&
-                    files[i].getId() == file.getId()) {
+            if ((files[i] != null) &&
+                    (files[i]).equals(file)) {
                 files[i] = null;
                 storage.setFiles(files);
                 return;
@@ -143,7 +138,7 @@ public class Controller {
 
     private File getFileById(long id, Storage storage) {
         for (File file : storage.getFiles()) {
-            if (file != null && file.getId() == id)
+            if ((file != null) && (file.getId() == id))
                 return file;
         }
         return null;
