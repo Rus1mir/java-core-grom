@@ -15,13 +15,17 @@ public class Demo {
         Storage storage = new Storage(1001, new File[10], new String[]{"pic", "music", "text"}, "USA", 100);
         File file = new File(12, "pretty", "pic", 20);
         Controller controller = new Controller();
-        controller.put(storage, file);
+        try {
+            controller.put(storage, file);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
         System.out.println(Arrays.deepToString(storage.getFiles()));
 
         // Put with same id
         try {
             controller.put(storage, file);
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
         System.out.println(Arrays.deepToString(storage.getFiles()));
@@ -30,7 +34,7 @@ public class Demo {
         File file1 = new File(13, "pretty big", "pic", 81);
         try {
             controller.put(storage, file1);
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
         System.out.println(Arrays.deepToString(storage.getFiles()));
@@ -41,7 +45,7 @@ public class Demo {
                 file = new File(i + 100, "file " + i, "music", 4);
                 controller.put(storage, file);
             }
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
         System.out.println(Arrays.deepToString(storage.getFiles()));
@@ -51,7 +55,7 @@ public class Demo {
         File wrongFormat = new File(1003, "pretty big", "wrong", 22);
         try {
             controller.put(storage, wrongFormat);
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
         System.out.println(Arrays.deepToString(storage.getFiles()));
@@ -60,7 +64,7 @@ public class Demo {
         File wrongName = new File(1010, "pretty big name", "text", 8);
         try {
             controller.put(storage, wrongName);
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
         System.out.println(Arrays.deepToString(storage.getFiles()));
@@ -81,7 +85,11 @@ public class Demo {
         System.out.println(Arrays.deepToString(storage.getFiles()));
 
         // Delete normally
-        controller.put(storage, file);
+        try {
+            controller.put(storage, file);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
         File file1 = new File(12, "pretty", "pic", 20);
         System.out.println(Arrays.deepToString(storage.getFiles()));
 
@@ -124,7 +132,11 @@ public class Demo {
 
         for (int i = 0; i < 10; i++) {
             File file = new File(1000 + i, "file" + i, "music", 10);
-            controller.put(storage1, file);
+            try {
+                controller.put(storage1, file);
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+            }
         }
 
         System.out.println(Arrays.deepToString(storage1.getFiles()));
@@ -133,7 +145,11 @@ public class Demo {
         System.out.println(Arrays.deepToString(storage2.getFiles()));
 
         // No free cells
-        controller.put(storage1, new File(555, "already", "music", 5));
+        try {
+            controller.put(storage1, new File(555, "already", "music", 5));
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
         System.out.println(Arrays.deepToString(storage1.getFiles()));
 
         try {
@@ -168,7 +184,11 @@ public class Demo {
 
         // Wrong format
         Storage storage4 = new Storage(1012, new File[5], new String[]{"pic", "music", "text", "some"}, "USA", 120);
-        controller.put(storage4, new File(234, "wrong", "some", 1));
+        try {
+            controller.put(storage4, new File(234, "wrong", "some", 1));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         System.out.println(Arrays.deepToString(storage4.getFiles()));
 
         try {
@@ -188,7 +208,11 @@ public class Demo {
 
         for (int i = 0; i < 10; i++) {
             File file = new File(i + 100, "file " + i, "music", 4);
-            controller.put(storage1, file);
+            try {
+                controller.put(storage1, file);
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+            }
         }
 
         System.out.println(Arrays.deepToString(storage1.getFiles()));

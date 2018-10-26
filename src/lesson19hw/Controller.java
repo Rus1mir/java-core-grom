@@ -1,7 +1,10 @@
 package lesson19hw;
 
 public class Controller {
-    public void put(Storage storage, File file) {
+    public void put(Storage storage, File file) throws Exception {
+        if (file == null && storage == null)
+            throw new IllegalArgumentException("Arguments are null");
+
         File[] files = storage.getFiles();
 
         boolean bool = true;
@@ -9,7 +12,7 @@ public class Controller {
             bool = bool && !file.getFormat().equals(format);
         }
         if (bool)
-            throw new RuntimeException("Filed to put file id " + file.getId() +
+            throw new Exception ("Filed to put file id " + file.getId() +
                     " cause no format support for storage id " + storage.getId());
 
         long space = storage.getStorageSize();
@@ -22,7 +25,7 @@ public class Controller {
             }
         }
         if (space < file.getSize())
-            throw new RuntimeException("Filed to put file id " + file.getId() +
+            throw new Exception("Filed to put file id " + file.getId() +
                     " cause no free space in storage id " + storage.getId());
 
         for (int i = 0; i < files.length; i++) {
@@ -32,7 +35,7 @@ public class Controller {
                 return;
             }
         }
-        throw new RuntimeException("Filed to put file id " + file.getId() +
+        throw new Exception("Filed to put file id " + file.getId() +
                 " cause no free cells in storage id " + storage.getId());
     }
 
@@ -115,7 +118,7 @@ public class Controller {
         try {
             delete(storageFrom, file);
             put(storageTo, file);
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             throw new RuntimeException("Failed to transfer file id " + id + " cause " + e.getMessage());
         }
     }
