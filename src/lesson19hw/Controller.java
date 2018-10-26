@@ -3,28 +3,9 @@ package lesson19hw;
 public class Controller {
     public void put(Storage storage, File file) throws Exception {
 
-        if (freeCellsCount(storage) == 0)
-            throw new Exception("Place file id " + file.getId() +
-                    " filed, cause no free cells in storage id " + storage.getId());
-
-        if (freeSpaceCalc(storage) < file.getSize())
-            throw new Exception("Place file id " + file.getId() +
-                    " filed, cause free space in storage id " + storage.getId() + " is not enough");
-
-        if (getFileById(file.getId(), storage) != null)
-            throw new Exception("Place file id " + file.getId() +
-                    " filed, cause file with same id is already exist in storage id " + storage.getId());
-
-        if (!isFileNameValid(file))
-            throw new Exception("Place file id " + file.getId() +
-                    " filed, cause file with id " + file.getId() + " has too large name");
-
-        if (!isFileFormatSupported(file, storage))
-            throw new Exception("Place file id " + file.getId() +
-                    " filed, cause file with id " + file.getId() + " has unsupported format for storage id " + storage.getId());
+        isPutPossible(storage, file);
 
         File[] files = storage.getFiles();
-
         for (int i = 0; i < files.length; i++) {
             if (files[i] == null) {
                 files[i] = file;
@@ -37,17 +18,16 @@ public class Controller {
     public void delete(Storage storage, File file) throws Exception {
 
         File[] files = storage.getFiles();
-
-        for (int i = 0; i < files.length; i++) {
-            if (files[i] != null &&
-                    files[i].getId() == file.getId()) {
-                files[i] = null;
-                storage.setFiles(files);
-                return;
+        if (isDeletePossible(storage, file)) {
+            for (int i = 0; i < files.length; i++) {
+                if (files[i] != null &&
+                        files[i].getId() == file.getId()) {
+                    files[i] = null;
+                    storage.setFiles(files);
+                    return;
+                }
             }
         }
-        throw new Exception("Delete file id " + file.getId() +
-                " filed, cause file is not found in " + storage.getId());
     }
 
     public void transferAll(Storage storageFrom, Storage storageTo) throws Exception {
@@ -105,22 +85,47 @@ public class Controller {
     public void transferFile(Storage storageFrom, Storage storageTo, long id) throws Exception {
 
         File file = getFileById(id, storageFrom);
-        if (file == null) {
-            throw new RuntimeException("Transfer filed cause file with id " + id +
-                    " is no find in source storage, id " + storageFrom.getId());
+        try {
+            if (isDeletePossible(storageFrom, file) && isPutPossible(storageTo, file)) {
+                put(storageTo, file);
+                delete(storageFrom, file);
+            }
+        } catch (Exception e) {
+            throw new Exception("Transfer file id " + file.getId() + " filed ", e);
         }
 
-        try {
-            put(storageTo, file);
-        } catch (Exception e) {
-            throw new Exception("Transfer file " + id + " filed", e);
-        }
+    }
 
-        try {
-            delete(storageFrom, file);
-        } catch (Exception e) {
-            throw new Exception("Transfer file " + id + " filed", e);
-        }
+    private boolean isPutPossible(Storage storage, File file) throws Exception {
+
+        if (freeCellsCount(storage) == 0)
+            throw new Exception("Place file id " + file.getId() +
+                    " filed, cause no free cells in storage id " + storage.getId());
+
+        if (freeSpaceCalc(storage) < file.getSize())
+            throw new Exception("Place file id " + file.getId() +
+                    " filed, cause free space in storage id " + storage.getId() + " is not enough");
+
+        if (getFileById(file.getId(), storage) != null)
+            throw new Exception("Place file id " + file.getId() +
+                    " filed, cause file with same id is already exist in storage id " + storage.getId());
+
+        if (!isFileNameValid(file))
+            throw new Exception("Place file id " + file.getId() +
+                    " filed, cause file with id " + file.getId() + " has too large name");
+
+        if (!isFileFormatSupported(file, storage))
+            throw new Exception("Place file id " + file.getId() +
+                    " filed, cause file with id " + file.getId() + " has unsupported format for storage id " + storage.getId());
+
+        return true;
+    }
+
+    private boolean isDeletePossible(Storage storage, File file) throws Exception {
+        if (getFileById(file.getId(), storage) == null)
+            throw new Exception("Delete file id " + file.getId() +
+                    " filed, cause file is not found in " + storage.getId());
+        return true;
     }
 
     private int freeCellsCount(Storage storage) {
