@@ -4,9 +4,9 @@ import java.util.Arrays;
 
 public class Demo {
     public static void main(String[] args) {
-        testPut();
+        //testPut();
         //testDelete();
-        //testTransfer();
+        testTransfer();
         //testTransferById();
     }
 
@@ -140,7 +140,11 @@ public class Demo {
         }
 
         System.out.println(Arrays.deepToString(storage1.getFiles()));
-        controller.transferAll(storage1, storage2);
+        try {
+            controller.transferAll(storage1, storage2);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         System.out.println(Arrays.deepToString(storage1.getFiles()));
         System.out.println(Arrays.deepToString(storage2.getFiles()));
 
@@ -154,7 +158,7 @@ public class Demo {
 
         try {
             controller.transferAll(storage2, storage1);
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
 
@@ -166,7 +170,7 @@ public class Demo {
 
         try {
             controller.transferAll(storage2, storage3);
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
 
@@ -178,7 +182,7 @@ public class Demo {
 
         try {
             controller.transferAll(storage1, storage3);
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
 
@@ -193,7 +197,7 @@ public class Demo {
 
         try {
             controller.transferAll(storage4, storage1);
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
     }

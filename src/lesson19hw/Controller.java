@@ -50,29 +50,29 @@ public class Controller {
                 " filed, cause file is not found in " + storage.getId());
     }
 
-    public void transferAll(Storage storageFrom, Storage storageTo) {
+    public void transferAll(Storage storageFrom, Storage storageTo) throws Exception {
 
         File[] filesFrom = storageFrom.getFiles();
 
         //Check for empty storage from
         if (filesFrom.length == freeCellsCount(storageFrom))
-            throw new RuntimeException("Transfer from storage id " + storageFrom.getId() +
+            throw new Exception("Transfer from storage id " + storageFrom.getId() +
                     " filed cause no files to transfer in source storage");
 
         //Check for free cells in storage to
         if (filesFrom.length - freeCellsCount(storageFrom) > freeCellsCount(storageTo))
-            throw new RuntimeException("Transfer from storage id " + storageFrom.getId() +
+            throw new Exception("Transfer from storage id " + storageFrom.getId() +
                     " filed cause number of free cells in destination storage id " + storageTo.getId() + " is not enough");
 
         //Check for free space in storage to
         if (storageFrom.getStorageSize() - freeSpaceCalc(storageFrom) > freeSpaceCalc(storageTo))
-            throw new RuntimeException("Transfer from storage id " + storageFrom.getId() +
+            throw new Exception("Transfer from storage id " + storageFrom.getId() +
                     " failed cause free space in destination storage id " + storageTo.getId() + " is not enough");
 
         //Check for file formats from storage from supported for storage to
         for (File file : filesFrom) {
             if ((file != null) && (!isFileFormatSupported(file, storageTo)))
-                throw new RuntimeException("Transfer from storage id " + storageFrom.getId() +
+                throw new Exception("Transfer from storage id " + storageFrom.getId() +
                         " filed cause file, id " + file.getId() +
                         " has unsupported format for destination storage, id " + storageTo.getId());
         }
@@ -82,7 +82,7 @@ public class Controller {
 
             if ((file != null) &&
                     (getFileById(file.getId(), storageTo) != null))
-                throw new RuntimeException("Transfer from storage id " + storageFrom.getId() +
+                throw new Exception("Transfer from storage id " + storageFrom.getId() +
                         " filed cause file, id " + file.getId() +
                         " is already exist in destination storage, id " + storageTo.getId());
         }
