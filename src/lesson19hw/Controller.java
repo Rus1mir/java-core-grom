@@ -34,7 +34,7 @@ public class Controller {
         }
     }
 
-    public void delete(Storage storage, File file) {
+    public void delete(Storage storage, File file) throws Exception {
 
         File[] files = storage.getFiles();
 
@@ -46,7 +46,7 @@ public class Controller {
                 return;
             }
         }
-        throw new RuntimeException("Delete file id " + file.getId() +
+        throw new Exception("Delete file id " + file.getId() +
                 " filed, cause file is not found in " + storage.getId());
     }
 
@@ -102,7 +102,7 @@ public class Controller {
         }
     }
 
-    public void transferFile(Storage storageFrom, Storage storageTo, long id) {
+    public void transferFile(Storage storageFrom, Storage storageTo, long id) throws Exception {
 
         File file = getFileById(id, storageFrom);
         if (file == null) {
@@ -111,10 +111,15 @@ public class Controller {
         }
 
         try {
-            delete(storageFrom, file);
             put(storageTo, file);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to transfer file id " + id + " cause " + e.getMessage());
+            throw new Exception("Transfer file " + id + " filed", e);
+        }
+
+        try {
+            delete(storageFrom, file);
+        } catch (Exception e) {
+            throw new Exception("Transfer file " + id + " filed", e);
         }
     }
 
@@ -138,7 +143,7 @@ public class Controller {
 
     private File getFileById(long id, Storage storage) {
         for (File file : storage.getFiles()) {
-            if ((file != null) && (file.getId() == id))
+            if (file != null && file.getId() == id)
                 return file;
         }
         return null;

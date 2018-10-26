@@ -6,8 +6,8 @@ public class Demo {
     public static void main(String[] args) {
         //testPut();
         //testDelete();
-        testTransfer();
-        //testTransferById();
+        //testTransfer();
+        testTransferById();
     }
 
     static void testPut() {
@@ -79,7 +79,7 @@ public class Demo {
 
         try {
             controller.delete(storage, file);
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
         System.out.println(Arrays.deepToString(storage.getFiles()));
@@ -95,7 +95,7 @@ public class Demo {
 
         try {
             controller.delete(storage, file1);
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
         System.out.println(Arrays.deepToString(storage.getFiles()));
@@ -106,7 +106,7 @@ public class Demo {
 
         try {
             controller.delete(storage, file2);
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
         System.out.println(Arrays.deepToString(storage.getFiles()));
@@ -117,7 +117,7 @@ public class Demo {
 
         try {
             controller.delete(storage, file3);
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
         System.out.println(Arrays.deepToString(storage.getFiles()));
@@ -211,7 +211,7 @@ public class Demo {
         Controller controller = new Controller();
 
         for (int i = 0; i < 10; i++) {
-            File file = new File(i + 100, "file " + i, "music", 4);
+            File file = new File(i + 100, "file " + i, "music", 2);
             try {
                 controller.put(storage1, file);
             } catch (Exception e) {
@@ -221,10 +221,18 @@ public class Demo {
 
         System.out.println(Arrays.deepToString(storage1.getFiles()));
         System.out.println(Arrays.deepToString(storage2.getFiles()));
-        controller.transferFile(storage1, storage2, 102);
+        try {
+            controller.transferFile(storage1, storage2, 102);
+        } catch (Exception e) {
+            System.out.println(e.getMessage() + e.getCause().getMessage());
+        }
         System.out.println(Arrays.deepToString(storage1.getFiles()));
         System.out.println(Arrays.deepToString(storage2.getFiles()));
-        controller.transferFile(storage1, storage2, 101);
+        try {
+            controller.transferFile(storage1, storage2, 101);
+        } catch (Exception e) {
+            System.out.println(e.getMessage() + e.getCause().getMessage());
+        }
         System.out.println(Arrays.deepToString(storage1.getFiles()));
         System.out.println(Arrays.deepToString(storage2.getFiles()));
     }
