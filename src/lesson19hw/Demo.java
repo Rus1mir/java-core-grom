@@ -4,9 +4,9 @@ import java.util.Arrays;
 
 public class Demo {
     public static void main(String[] args) {
-        //testPut();
-        //testDelete();
-        //testTransfer();
+        testPut();
+        testDelete();
+        testTransfer();
         testTransferById();
     }
 
@@ -224,14 +224,14 @@ public class Demo {
         try {
             controller.transferFile(storage1, storage2, 102);
         } catch (Exception e) {
-            System.out.println(e.getMessage() + e.getCause().getMessage());
+            System.out.println(e.getMessage());
         }
         System.out.println(Arrays.deepToString(storage1.getFiles()));
         System.out.println(Arrays.deepToString(storage2.getFiles()));
         try {
             controller.transferFile(storage1, storage2, 101);
         } catch (Exception e) {
-            System.out.println(e.getMessage() + e.getCause().getMessage());
+            System.out.println(e.getMessage());
         }
         System.out.println(Arrays.deepToString(storage1.getFiles()));
         System.out.println(Arrays.deepToString(storage2.getFiles()));
