@@ -4,9 +4,9 @@ import java.util.Arrays;
 
 public class Demo {
     public static void main(String[] args) {
-        testPut();
-        testDelete();
-        testTransfer();
+        //testPut();
+        //testDelete();
+        // testTransfer();
         testTransferById();
     }
 
@@ -210,7 +210,7 @@ public class Demo {
 
         Controller controller = new Controller();
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 2; i++) {
             File file = new File(i + 100, "file " + i, "music", 2);
             try {
                 controller.put(storage1, file);
@@ -222,16 +222,16 @@ public class Demo {
         System.out.println(Arrays.deepToString(storage1.getFiles()));
         System.out.println(Arrays.deepToString(storage2.getFiles()));
         try {
-            controller.transferFile(storage1, storage2, 102);
+            controller.transferFile(storage1, storage2, 100);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
         System.out.println(Arrays.deepToString(storage1.getFiles()));
         System.out.println(Arrays.deepToString(storage2.getFiles()));
         try {
             controller.transferFile(storage1, storage2, 101);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
         System.out.println(Arrays.deepToString(storage1.getFiles()));
         System.out.println(Arrays.deepToString(storage2.getFiles()));

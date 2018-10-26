@@ -73,19 +73,23 @@ public class Controller {
 
         if (message != null)
             throw new Exception("Transfer file id " + id + " from storage id " + storageFrom.getId()
-                    + " to storage id " + storageTo + " is filed file not found in storage id " + message);
+                    + " to storage id " + storageTo.getId() + " is filed file not found in storage id " + message);
 
         File[] filesFrom = storageFrom.getFiles();
         File[] filesTo = storageTo.getFiles();
 
         for (int i = 0; i < filesTo.length; i++) {
-            if (filesTo[i] == null)
+            if (filesTo[i] == null) {
                 filesTo[i] = file;
+                break;
+            }
         }
 
         for (int i = 0; i < filesFrom.length; i++) {
-            if (filesFrom[i] != null && filesFrom[i].getId() == id)
+            if (filesFrom[i] != null && filesFrom[i].getId() == id) {
                 filesFrom[i] = null;
+                break;
+            }
         }
     }
 
