@@ -1,31 +1,42 @@
 package lesson19hw;
 
 public class Controller {
+
     public void put(Storage storage, File file) throws Exception {
 
-        String message = checkPut(storage, file);
+        String message = "Failed to put file " + file.getId() +
+                " to storage " + storage.getId() + " cause ";
 
-        if (message != null)
-            throw new Exception("Filed put file id " + file.getId() +
-                    " in storage id " + storage.getId() + message);
+        if (!isFileFormatSupported(file, storage))
+            throw new Exception(message + "file format is unsupported");
 
         File[] files = storage.getFiles();
+
+        long space = storage.getStorageSize();
+        int cells = 0;
+        int index = 0;
+
         for (int i = 0; i < files.length; i++) {
             if (files[i] == null) {
-                files[i] = file;
-                storage.setFiles(files);
-                return;
+                index = i;
+                cells++;
+            } else {
+                if (files[i].getId() == file.getId())
+                    throw new Exception(message + "duplicate from id was found");
+                space -= files[i].getSize();
             }
         }
+
+        if (cells == 0)
+            throw new Exception(message + "no free cells");
+
+        if (file.getSize() > space)
+            throw new Exception(message + "no free space");
+
+        files[index] = file;
     }
 
     public void delete(Storage storage, File file) throws Exception {
-
-        String message = checkDelete(storage, file);
-
-        if (message != null)
-            throw new Exception("Filed delete file id " + file.getId() +
-                    " from storage id " + storage.getId() + message);
 
         File[] files = storage.getFiles();
 
@@ -33,22 +44,64 @@ public class Controller {
             if (files[i] != null &&
                     files[i].getId() == file.getId()) {
                 files[i] = null;
-                storage.setFiles(files);
                 return;
             }
         }
+
+        throw new Exception("Filed to delete file id " + file.getId() +
+                " from storage id " + storage.getId() +
+                " cause file is not found");
     }
 
     public void transferAll(Storage storageFrom, Storage storageTo) throws Exception {
 
-        String message = checkTransferAll(storageFrom, storageTo);
-
-        if (message != null)
-            throw new Exception("Transfer all files from storage id " + storageFrom.getId() +
-                    " to storage id " + storageTo + " is filed " + message);
+        String message = "Filed to transfer all files from storage id " +
+                storageFrom.getId() + " to storage " + storageTo.getId() + " cause ";
 
         File[] filesFrom = storageFrom.getFiles();
         File[] filesTo = storageTo.getFiles();
+
+        long space = storageTo.getStorageSize();
+        int cells = 0;
+        int nullCount = 0;
+
+        for (File file : filesTo) {
+            if (file == null) {
+                cells++;
+            } else {
+                space -= file.getSize();
+            }
+        }
+
+        for (File fileFrom : filesFrom) {
+
+            if (fileFrom != null) {
+                cells--;
+                space -= fileFrom.getSize();
+
+                for (File fileTo : filesTo) {
+                    if (fileTo != null) {
+                        if (fileFrom.getId() == fileTo.getId())
+                            throw new Exception(message + "duplicate was found");
+                    }
+                }
+                if (!isFileFormatSupported(fileFrom, storageTo))
+                    throw new Exception(message + "file format is unsupported");
+
+            } else {
+                nullCount++;
+            }
+        }
+
+        if (nullCount == filesFrom.length)
+            throw new Exception(message + "no files to transfer");
+
+        if (cells < 0)
+            throw new Exception(message + "no free cells");
+
+        if (space < 0)
+            throw new Exception(message + "no free space");
+
 
         for (int i = 0, n = 0; i < filesFrom.length; i++) {
             for (int j = n; j < filesTo.length; j++) {
@@ -66,105 +119,17 @@ public class Controller {
 
         File file = getFileById(id, storageFrom);
         if (file == null)
-            throw new Exception("Transfer file id " + id + " is filed file not found in storage id " +
-                    storageFrom.getId());
+            throw new Exception("Transfer file id " + id +
+                    " is filed file not found in storage id " + storageFrom.getId());
 
-        String message = checkPut(storageTo, file);
+        delete(storageFrom, file);
 
-        if (message != null)
-            throw new Exception("Transfer file id " + id + " from storage id " + storageFrom.getId()
-                    + " to storage id " + storageTo.getId() + " is filed file not found in storage id " + message);
-
-        File[] filesFrom = storageFrom.getFiles();
-        File[] filesTo = storageTo.getFiles();
-
-        for (int i = 0; i < filesTo.length; i++) {
-            if (filesTo[i] == null) {
-                filesTo[i] = file;
-                break;
-            }
+        try {
+            put(storageTo, file);
+        } catch (Exception e) {
+            throw new Exception("Transfer file id " + id +
+                    " is filed " + " cause " + e.getMessage());
         }
-
-        for (int i = 0; i < filesFrom.length; i++) {
-            if (filesFrom[i] != null && filesFrom[i].getId() == id) {
-                filesFrom[i] = null;
-                break;
-            }
-        }
-    }
-
-    private String checkTransferAll(Storage storageFrom, Storage storageTo) {
-
-        File[] filesFrom = storageFrom.getFiles();
-        //Check for empty storage from
-        if (filesFrom.length == freeCellsCount(storageFrom))
-            return "Storage id " + storageFrom.getId() + " is empty";
-
-        //Check for free cells in storage to
-        if (filesFrom.length - freeCellsCount(storageFrom) > freeCellsCount(storageTo))
-            return "Number of free cells in storage id " + storageTo.getId() + " is not enough";
-
-        //Check for free space in storage to
-        if (storageFrom.getStorageSize() - freeSpaceCalc(storageFrom) > freeSpaceCalc(storageTo))
-            return "Free space in storage id " + storageTo.getId() + " is not enough";
-
-        //Check for file formats from storage from supported for storage to
-        for (File file : filesFrom) {
-            if ((file != null) && (!isFileFormatSupported(file, storageTo)))
-                return "Unsupported file format " + file.getFormat() + " for storage id " + storageTo.getId();
-        }
-
-        //Check for file id already exist in storage to
-        for (File file : filesFrom) {
-            if ((file != null) &&
-                    (getFileById(file.getId(), storageTo) != null))
-                return "File with id " + file.getId() + " is already exist in storage id " + storageTo.getId();
-        }
-        return null;
-    }
-
-    private String checkPut(Storage storage, File file) {
-
-        if (freeCellsCount(storage) == 0)
-            return "No free cells in storage id " + storage.getId();
-
-        if (freeSpaceCalc(storage) < file.getSize())
-            return "No free space in storage id " + storage.getId();
-
-        if (getFileById(file.getId(), storage) != null)
-            return "File with id " + file.getId() + " is already exist in storage id " + storage.getId();
-
-        if (!isFileNameValid(file))
-            return "File with id " + file.getId() + " name is too long";
-
-        if (!isFileFormatSupported(file, storage))
-            return "File with id " + file.getId() + " has unsupported format for storage id " + storage.getId();
-
-        return null;
-    }
-
-    private String checkDelete(Storage storage, File file) {
-        if (getFileById(file.getId(), storage) == null)
-            return "File id " + file.getId() + " no found in storage id " + storage.getId();
-        return null;
-    }
-
-    private int freeCellsCount(Storage storage) {
-        int counter = 0;
-        for (File file : storage.getFiles()) {
-            if (file == null)
-                counter++;
-        }
-        return counter;
-    }
-
-    private long freeSpaceCalc(Storage storage) {
-        long space = storage.getStorageSize();
-        for (File file : storage.getFiles()) {
-            if (file != null)
-                space -= file.getSize();
-        }
-        return space;
     }
 
     private File getFileById(long id, Storage storage) {
@@ -173,10 +138,6 @@ public class Controller {
                 return file;
         }
         return null;
-    }
-
-    private boolean isFileNameValid(File file) {
-        return file.getName().length() <= 10;
     }
 
     private boolean isFileFormatSupported(File file, Storage storage) {
