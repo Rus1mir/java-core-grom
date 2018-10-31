@@ -122,10 +122,9 @@ public class Controller {
             throw new Exception("Transfer file id " + id +
                     " is filed file not found in storage id " + storageFrom.getId());
 
-        delete(storageFrom, file);
-
         try {
             put(storageTo, file);
+            delete(storageFrom, file);
         } catch (Exception e) {
             throw new Exception("Transfer file id " + id +
                     " is filed " + " cause " + e.getMessage());
