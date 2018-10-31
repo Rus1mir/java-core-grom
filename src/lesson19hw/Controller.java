@@ -124,11 +124,12 @@ public class Controller {
 
         try {
             put(storageTo, file);
-            delete(storageFrom, file);
         } catch (Exception e) {
             throw new Exception("Transfer file id " + id +
                     " is filed " + " cause " + e.getMessage());
         }
+
+        delete(storageFrom, file);
     }
 
     private File getFileById(long id, Storage storage) {
