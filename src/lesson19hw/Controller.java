@@ -104,6 +104,8 @@ public class Controller {
 
 
         for (int i = 0, n = 0; i < filesFrom.length; i++) {
+            if (filesFrom[i] == null)
+                continue;
             for (int j = n; j < filesTo.length; j++) {
                 if (filesTo[j] == null) {
                     filesTo[j] = filesFrom[i];
