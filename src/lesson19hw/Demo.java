@@ -22,11 +22,11 @@ public class Demo {
         //testTransferAllEmptySource();
         //testTransferAllWrongFormat();
 
-        testTransferByIdNormally();
-        testTransferByIdEmptyFrom();
-        testTransferByIdAlreadyExist();
-        testTransferByIdWrongFormat();
-        testTransferByIdNoFound();
+        //testTransferByIdNormally();
+        //testTransferByIdEmptyFrom();
+        //testTransferByIdAlreadyExist();
+        //testTransferByIdWrongFormat();
+        //testTransferByIdNoFound();
     }
 
     static void testCreateFileBigName() throws Exception {

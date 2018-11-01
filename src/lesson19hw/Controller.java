@@ -121,22 +121,15 @@ public class Controller {
 
         File file = getFileById(id, storageFrom);
         if (file == null)
-            throw new Exception("Transfer file id " + id +
-                    " is filed file not found in storage id " + storageFrom.getId());
+            throw new Exception("Filed to transfer file id " + id +
+                    " cause file not found in storage id " + storageFrom.getId());
 
         try {
             put(storageTo, file);
+            delete(storageFrom, file);
         } catch (Exception e) {
-            throw new Exception("Transfer file id " + id +
-                    " is filed " + " cause " + e.getMessage());
-        }
-
-        File[] filesFrom = storageFrom.getFiles();
-        for (int i = 0; i < filesFrom.length; i++) {
-            if (filesFrom[i] != null && filesFrom[i].getId() == file.getId()) {
-                filesFrom[i] = null;
-                break;
-            }
+            throw new Exception("Filed to transfer file id " + id +
+                    " cause " + e.getMessage());
         }
     }
 
