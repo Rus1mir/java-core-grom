@@ -131,11 +131,12 @@ public class Controller {
                     " is filed " + " cause " + e.getMessage());
         }
 
-        try {
-            delete(storageFrom, file);
-        } catch (Exception e) {
-            throw new Exception("Transfer file id " + id +
-                    " is filed " + " cause " + e.getMessage());
+        File[] filesFrom = storageFrom.getFiles();
+        for (int i = 0; i < filesFrom.length; i++) {
+            if (filesFrom[i] != null && filesFrom[i].getId() == file.getId()) {
+                filesFrom[i] = null;
+                break;
+            }
         }
     }
 
