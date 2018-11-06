@@ -86,7 +86,7 @@ public class Controller {
         }
 
         for (int i = 0; i < filesFrom.length; i++) {
-            if (filesFrom[i] != null && filesFrom[i].getId() == file.getId()) {
+            if (filesFrom[i] != null && filesFrom[i].getId() == id) {
                 filesFrom[i] = null;
                 break;
             }

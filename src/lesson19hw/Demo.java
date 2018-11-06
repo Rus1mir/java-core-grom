@@ -1,6 +1,7 @@
 package lesson19hw;
 
 //https://github.com/Rus1mir/java-core-grom/tree/master/src/lesson19hw
+
 import java.util.Arrays;
 
 public class Demo {
@@ -22,7 +23,7 @@ public class Demo {
         //testTransferAllEmptySource();
         //testTransferAllWrongFormat();
 
-        //testTransferByIdNormally();
+        testTransferByIdNormally();
         //testTransferByIdEmptyFrom();
         //testTransferByIdAlreadyExist();
         //testTransferByIdWrongFormat();
