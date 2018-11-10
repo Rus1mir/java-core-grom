@@ -43,21 +43,20 @@ public class Controller {
         validatePut(storageTo, filesFrom);
 
 //Замечание цикл неверный траблы с индексами, совет юзать фор ич и переменные-индексы
-        int i = -1;
+        int i = 0;
         for (File fileFrom : filesFrom) {
-            i++;
-            int j=-1;
-            if (fileFrom == null) {
-                continue;
-            }
-            for (File fileTo : filesTo) {
-                j++;
-                if (fileTo == null) {
-                    filesTo[j] = fileFrom;
-                    filesFrom[i] = null;
-                    break;
+            int j = 0;
+            if (fileFrom != null) {
+                for (File fileTo : filesTo) {
+                    if (fileTo == null) {
+                        filesTo[j] = fileFrom;
+                        filesFrom[i] = null;
+                        break;
+                    }
+                    j++;
                 }
             }
+            i++;
         }
     }
 
