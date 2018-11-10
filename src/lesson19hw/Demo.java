@@ -23,7 +23,7 @@ public class Demo {
         //testTransferAllEmptySource();
         //testTransferAllWrongFormat();
 
-        testTransferByIdNormally();
+        //testTransferByIdNormally();
         //testTransferByIdEmptyFrom();
         //testTransferByIdAlreadyExist();
         //testTransferByIdWrongFormat();
