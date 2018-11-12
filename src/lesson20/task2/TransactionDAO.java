@@ -50,17 +50,21 @@ public class TransactionDAO {
         return res;
     }
 
-    public Transaction[] transactionList(String city) {
+    public Transaction[] transactionList(String city) throws BadRequestException{
+
+        if (city == null)
+            throw new BadRequestException("The city in request is null");
+
         int count = 0;
         for (Transaction transaction : transactions) {
-            if (transaction != null && transaction.getCity().equals(city))
+            if (transaction != null && city.equals(transaction.getCity()))
                 count++;
         }
 
         int index = 0;
         Transaction[] res = new Transaction[count];
         for (Transaction transaction : transactions) {
-            if (transaction != null && transaction.getCity().equals(city)) {
+            if (city.equals(transaction.getCity())) {
                 res[index] = transaction;
                 index++;
             }
@@ -87,6 +91,7 @@ public class TransactionDAO {
     }
 
     private void validateSave(Transaction transaction) throws BadRequestException {
+        validateCity(transaction);
 
         if (transaction.getAmount() > utils.getLimitSimpleTransactionAmount())
             throw new LimitExceeded("Transaction amount limit exceed " + transaction.getId() + " Can't be saved");
@@ -105,14 +110,15 @@ public class TransactionDAO {
         if (count + 1 > utils.getLimitTransactionsPerDayCount())
             throw new LimitExceeded("Transaction count limit per day count exceed " +
                     transaction.getId() + " Can't be saved");
+    }
 
-        boolean res = false;
-        for (String city : utils.getCities()) {
-            res = res || city.equals(transaction.getCity());
+    private void validateCity(Transaction transaction) throws BadRequestException {
+        for (String c : utils.getCities()) {
+            if (transaction.getCity().equals(c))
+                return;
         }
-        if (!res)
-            throw new BadRequestException("The city of transaction is not valid " +
-                    transaction.getId() + " Can't be saved");
+        throw new BadRequestException("The city of transaction is not valid " +
+                transaction.getId() + " Can't be saved");
     }
 
     private Transaction[] getTransactionsPerDay(Date dateOfCurTransaction) {
