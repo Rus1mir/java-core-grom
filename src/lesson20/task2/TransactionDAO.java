@@ -111,7 +111,7 @@ public class TransactionDAO {
 
     private void validateCity(Transaction transaction) throws BadRequestException {
         for (String c : utils.getCities()) {
-            if (transaction.getCity().equals(c))
+            if (c.equals(transaction.getCity()))
                 return;
         }
         throw new BadRequestException("The city of transaction is not valid " +
