@@ -50,10 +50,7 @@ public class TransactionDAO {
         return res;
     }
 
-    public Transaction[] transactionList(String city) throws BadRequestException{
-
-        if (city == null)
-            throw new BadRequestException("The city in request is null");
+    public Transaction[] transactionList(String city) {
 
         int count = 0;
         for (Transaction transaction : transactions) {
@@ -64,7 +61,7 @@ public class TransactionDAO {
         int index = 0;
         Transaction[] res = new Transaction[count];
         for (Transaction transaction : transactions) {
-            if (city.equals(transaction.getCity())) {
+            if (transaction != null && city.equals(transaction.getCity())) {
                 res[index] = transaction;
                 index++;
             }
