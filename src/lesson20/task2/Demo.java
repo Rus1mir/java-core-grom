@@ -10,6 +10,7 @@ public class Demo {
         //testSaveBigGroupAmount();
         //testSaveNoSpace();
         //testSaveWrongCity();
+        testSaveAlreadyExist();
     }
 
     private static void testSaveNormal() throws Exception {
@@ -50,9 +51,18 @@ public class Demo {
 
     private static void testSaveWrongCity() throws Exception {
         Controller controller = new Controller();
-        Transaction transaction = new Transaction(10, "Lviv", 3,
+        Transaction transaction = new Transaction(10, "Kiev", 3,
                 "some", TransactionType.INCOME, new Date());
         controller.save(transaction);
         System.out.println(Arrays.deepToString(controller.transactionList()));
+    }
+
+    private static void testSaveAlreadyExist() throws Exception {
+        Controller controller = new Controller();
+        Transaction transaction = new Transaction(10, "Kiev", 3,
+                "some", TransactionType.INCOME, new Date());
+        controller.save(transaction);
+        System.out.println(Arrays.deepToString(controller.transactionList()));
+        controller.save(transaction);
     }
 }

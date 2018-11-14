@@ -89,7 +89,7 @@ public class TransactionDAO {
 
     private void validateSave(Transaction transaction) throws BadRequestException {
         validateCity(transaction);
-
+validateDuplicate(transaction);
         if (transaction.getAmount() > utils.getLimitSimpleTransactionAmount())
             throw new LimitExceeded("Transaction amount limit exceed " + transaction.getId() + " Can't be saved");
 
@@ -116,6 +116,14 @@ public class TransactionDAO {
         }
         throw new BadRequestException("The city of transaction is not valid " +
                 transaction.getId() + " Can't be saved");
+    }
+
+    private void validateDuplicate(Transaction transaction) throws BadRequestException {
+        for(Transaction tr : transactions) {
+            if (tr != null && tr.equals(transaction))
+                throw new BadRequestException("Transaction already exist " +
+                        transaction.getId() + " Can't be saved");
+        }
     }
 
     private Transaction[] getTransactionsPerDay(Date dateOfCurTransaction) {
