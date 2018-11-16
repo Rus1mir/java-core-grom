@@ -8,8 +8,8 @@ public class Demo {
         //testSaveNormal();
         //testSaveBigSimpleAmount();
         //testSaveBigGroupAmount();
-        //testSaveNoSpace();
-        //testSaveWrongCity();
+        testSaveNoSpace();
+        testSaveWrongCity();
         testSaveAlreadyExist();
     }
 

@@ -1,8 +1,8 @@
 package lesson22.lesson22hw;
 
-import lesson20.task2.exception.BadRequestException;
-import lesson20.task2.exception.InternalServerException;
-import lesson20.task2.exception.LimitExceeded;
+import lesson22.lesson22hw.exception.BadRequestException;
+import lesson22.lesson22hw.exception.InternalServerException;
+import lesson22.lesson22hw.exception.LimitExceeded;
 
 import java.util.Calendar;
 import java.util.Date;

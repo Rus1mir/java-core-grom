@@ -1,7 +1,7 @@
 package lesson22.lesson22hw;
 
-import lesson20.task2.exception.BadRequestException;
-import lesson20.task2.exception.InternalServerException;
+import lesson22.lesson22hw.exception.BadRequestException;
+import lesson22.lesson22hw.exception.InternalServerException;
 
 public class Controller {
 
