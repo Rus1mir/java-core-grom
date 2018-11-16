@@ -18,7 +18,7 @@ public class UkrainianBankSystem implements BankSystem {
         // пополнить
         if (!checkFundingLimits(user, amount))
             return;
-        //user.setBalance(user.getBalance() + amount - user.getBank().getCommission(amount) * amount);
+        //repository.setBalance(repository.getBalance() + amount - repository.getBank().getCommission(amount) * amount);
         user.setBalance(user.getBalance() + amount);
     }
 
@@ -45,7 +45,7 @@ public class UkrainianBankSystem implements BankSystem {
     }
 
     private boolean checkFundingLimits(User user, int amount) {
-        // if (amount - user.getBank().getCommission(amount) * amount > user.getBank().getLimitOfFunding()) {
+        // if (amount - repository.getBank().getCommission(amount) * amount > repository.getBank().getLimitOfFunding()) {
         if (amount > user.getBank().getLimitOfFunding()) {
             printFundingErrMsg(amount, user);
             return false;
@@ -74,10 +74,10 @@ public class UkrainianBankSystem implements BankSystem {
     }
 
     private void printWithdrawalErrMsg(int amount, User user) {
-        System.err.println("Can't withdraw money " + amount + " from user " + user.toString());
+        System.err.println("Can't withdraw money " + amount + " from repository " + user.toString());
     }
 
     private void printFundingErrMsg(int amount, User user) {
-        System.err.println("Can't deposit money " + amount + " from user " + user.toString());
+        System.err.println("Can't deposit money " + amount + " from repository " + user.toString());
     }
 }

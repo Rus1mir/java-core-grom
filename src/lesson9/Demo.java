@@ -33,7 +33,7 @@ public class Demo {
 
         int n = 15;
         while (n > 0) {
-            User user1 = new User(n, "user " + n, "123" + n);
+            User user1 = new User(n, "repository " + n, "123" + n);
             System.out.println(userRepository.save(user1));
             n--;
         }
@@ -90,7 +90,7 @@ public class Demo {
         System.out.println(Arrays.toString(userRepository.getUserNames()));
 
         for (int i = 100; i < 111; i++) {
-            userRepository.save(new User(i, "user " + i, "A " + i));
+            userRepository.save(new User(i, "repository " + i, "A " + i));
         }
         System.out.println(Arrays.toString(userRepository.getUserNames()));
 
@@ -109,7 +109,7 @@ public class Demo {
         System.out.println(Arrays.toString(userRepository.getUserNames()));
 
         for (int i = 100; i < 111; i++) {
-            userRepository.save(new User(i, "user " + i, "A " + i));
+            userRepository.save(new User(i, "repository " + i, "A " + i));
         }
         System.out.println(Arrays.toString(userRepository.getUserIds()));
 
@@ -151,13 +151,13 @@ public class Demo {
         User user = new User(1212, "John", "12D43");
         userRepository.save(user);
         for (int i = 100; i < 109; i++) {
-            userRepository.save(new User(i, "user " + i, "A " + i));
+            userRepository.save(new User(i, "repository " + i, "A " + i));
         }
         System.out.println(Arrays.deepToString(userRepository.getUsers()));
 
 
         System.out.println(userRepository.getUserById(1212));
-        System.out.println(userRepository.getUserByName("user 102"));
+        System.out.println(userRepository.getUserByName("repository 102"));
         System.out.println(userRepository.getUserBySessionId("A 105"));
     }
 }

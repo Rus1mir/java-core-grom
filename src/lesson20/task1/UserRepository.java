@@ -15,7 +15,7 @@ public class UserRepository {
     public User save(User user) throws Exception {
 
         if (user == null)
-            throw new BadRequestException("User is null can't save user");
+            throw new BadRequestException("User is null can't save repository");
 
         try {
             findById(user.getId());
@@ -32,13 +32,13 @@ public class UserRepository {
             }
             index++;
         }
-        throw new InternalServerException("Not enough space for save user id: " + user.getId());
+        throw new InternalServerException("Not enough space for save repository id: " + user.getId());
     }
 
     public User update(User user) throws Exception {
 
         if (user == null)
-            throw new BadRequestException("User is null can't update user");
+            throw new BadRequestException("User is null can't update repository");
 
         findById(user.getId());
 
