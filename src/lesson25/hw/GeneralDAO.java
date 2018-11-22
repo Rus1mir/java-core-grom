@@ -30,9 +30,6 @@ public class GeneralDAO<T extends EntityId> {
                 count++;
         }
 
-        if (count == 0)
-            throw new InternalServerException("no items to get");
-
         T[] res = (T[]) new EntityId[count];
         int index = 0;
 
