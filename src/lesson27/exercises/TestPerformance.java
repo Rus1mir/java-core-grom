@@ -1,4 +1,4 @@
-package lesson27;
+package lesson27.exercises;
 
 import java.util.ArrayList;
 import java.util.Date;
