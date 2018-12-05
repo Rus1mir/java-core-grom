@@ -1,6 +1,8 @@
 package lesson30.hw;
 
 import lesson30.hw.exceptions.BadRequestException;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,40 +22,40 @@ public class Controller {
         this.firmDAO = firmDAO;
     }
 
-    public Collection<Employee> employeesByProject(String projectName) throws BadRequestException {
+    public ArrayList<Employee> employeesByProject(String projectName) throws BadRequestException {
         return employeeDAO.employeesByProject(projectDAO.projectByName(projectName));
     }
 
-    public Collection<Project> projectsByEmployee(Employee employee) throws BadRequestException {
+    public ArrayList<Project> projectsByEmployee(Employee employee) throws BadRequestException {
         return employeeDAO.projectsByEmployee(employee);
     }
 
-    public Collection<Employee> employeesByDepartmentWithoutProject(DepartmentType departmentType) {
+    public ArrayList<Employee> employeesByDepartmentWithoutProject(DepartmentType departmentType) {
         return employeeDAO.employeesByDepartmentWithoutProject(departmentType);
     }
 
-    public Collection<Employee> employeesWithoutProject() {
+    public ArrayList<Employee> employeesWithoutProject() {
         return employeeDAO.employeesWithoutProject();
     }
 
-    public Collection<Employee> employeesByTeamLead(Employee lead) throws BadRequestException {
+    public ArrayList<Employee> employeesByTeamLead(Employee lead) throws BadRequestException {
         return employeeDAO.employeesByTeamLead(lead);
     }
 
-    public Collection<Employee> teamLeadsByEmployee(Employee employee) throws BadRequestException {
+    public ArrayList<Employee> teamLeadsByEmployee(Employee employee) throws BadRequestException {
         return employeeDAO.teamLeadsByEmployee(employee);
     }
 
-    public Collection<Employee> employeesByProjectEmployee(Employee employee) {
+    public ArrayList<Employee> employeesByProjectEmployee(Employee employee) {
         return employeeDAO.employeesByProjectEmployee(employee);
     }
 
-    public Collection<Project> projectsByCustomer(Customer customer) {
+    public ArrayList<Project> projectsByCustomer(Customer customer) {
         return projectDAO.projectsByCustomer(customer);
     }
 
-    public Collection<Employee> employeesByCustomerProjects(Customer customer) {
-        Set<Employee> res = new HashSet<>();
+    public ArrayList<Employee> employeesByCustomerProjects(Customer customer) {
+        ArrayList<Employee> res = new ArrayList<>();
 
         for(Project proj : projectDAO.projectsByCustomer(customer)) {
             res.addAll(employeeDAO.employeesByProject(proj));

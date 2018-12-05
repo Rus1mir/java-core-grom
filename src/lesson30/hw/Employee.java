@@ -1,6 +1,6 @@
 package lesson30.hw;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Employee {
@@ -9,9 +9,9 @@ public class Employee {
     private Date dateHired;
     private Position position;
     private Department department;
-    private Collection<Project> projects;
+    private ArrayList<Project> projects;
 
-    public Employee(String firstName, String lastName, Date dateHired, Position position, Department department, Collection<Project> projects) {
+    public Employee(String firstName, String lastName, Date dateHired, Position position, Department department, ArrayList<Project> projects) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateHired = dateHired;
@@ -40,7 +40,7 @@ public class Employee {
         return department;
     }
 
-    public Collection<Project> getProjects() {
+    public ArrayList<Project> getProjects() {
         return projects;
     }
 

@@ -6,18 +6,18 @@ import java.util.*;
 
 public class ProjectDAO {
 
-    private Set<Project> projects;
+    private HashSet<Project> projects;
 
     public ProjectDAO(Collection<Project> projects) {
         this.projects = new HashSet<>(projects);
     }
 
-    public Collection<Project> getProjects() {
+    public HashSet<Project> getProjects() {
         return projects;
     }
 
-    public Collection<Project> projectsByCustomer(Customer customer) {
-        List<Project> res = new ArrayList<>();
+    public ArrayList<Project> projectsByCustomer(Customer customer) {
+        ArrayList<Project> res = new ArrayList<>();
 
         for (Project p : projects) {
             if (p.getCustomer().equals(customer))

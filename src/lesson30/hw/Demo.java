@@ -24,7 +24,7 @@ public class Demo {
 
         ArrayList<Employee> employees = new ArrayList<>();
         employees.add(new Employee("Den", "Cooper", sdf.parse("22-11-2016"), Position.DEVELOPER,
-                null, new ArrayList<Project>(projects.subList(0, 2))));
+                null, new ArrayList<Project>(projects.subList(3, 4))));
         employees.add(new Employee("Chris", "Noe", sdf.parse("25-01-2017"), Position.DEVELOPER,
                 null, new ArrayList<Project>(projects.subList(0, 3))));
         employees.add(new Employee("Peter", "Brown", sdf.parse("02-05-2016"), Position.DEVELOPER,

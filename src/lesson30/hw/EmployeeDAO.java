@@ -1,5 +1,6 @@
 package lesson30.hw;
 
+import com.sun.xml.internal.bind.v2.TODO;
 import lesson30.hw.exceptions.BadRequestException;
 
 import java.util.*;
@@ -11,8 +12,8 @@ public class EmployeeDAO {
         this.employees = new HashSet<>(employees);
     }
 
-    public Collection<Employee> employeesByProject(Project project) {
-        List<Employee> res = new ArrayList<>();
+    public ArrayList<Employee> employeesByProject(Project project) {
+        ArrayList<Employee> res = new ArrayList<>();
 
         for (Employee e : employees) {
             if (e.getProjects().contains(project))
@@ -21,7 +22,7 @@ public class EmployeeDAO {
         return res;
     }
 
-    public Collection<Project> projectsByEmployee(Employee employee) throws BadRequestException {
+    public ArrayList<Project> projectsByEmployee(Employee employee) throws BadRequestException {
 
         for (Employee e : employees) {
             if (e.equals(employee))
@@ -30,18 +31,18 @@ public class EmployeeDAO {
         throw new BadRequestException("No employee found: " + employee.getLastName());
     }
 
-    public Collection<Employee> employeesByDepartmentWithoutProject(DepartmentType departmentType) {
-        List<Employee> res = new ArrayList<>();
+    public ArrayList<Employee> employeesByDepartmentWithoutProject(DepartmentType departmentType) {
+        ArrayList<Employee> res = new ArrayList<>();
 
-        for (Employee e : employeesWithoutProject()) {
-            if (e.getDepartment().getType() == departmentType)
+        for (Employee e : employees) {
+            if (e.getProjects().isEmpty() && e.getDepartment().getType() == departmentType)
                 res.add(e);
         }
         return res;
     }
 
-    public Collection<Employee> employeesWithoutProject() {
-        List<Employee> res = new ArrayList<>();
+    public ArrayList<Employee> employeesWithoutProject() {
+        ArrayList<Employee> res = new ArrayList<>();
 
         for (Employee e : employees) {
             if (e.getProjects().isEmpty())
@@ -50,20 +51,19 @@ public class EmployeeDAO {
         return res;
     }
 
-    public Collection<Employee> employeesByProjectEmployee(Employee employee) {
-        Set<Employee> res = new HashSet<>();
+    public ArrayList<Employee> employeesByProjectEmployee(Employee employee) {
+        ArrayList<Employee> res = new ArrayList<>();
 
-        for (Project p : employee.getProjects()) {
-            for (Employee e : employees) {
-                if (!e.equals(employee) && e.getProjects().contains(p)) {
-                    res.add(e);
-                }
-            }
+        for (Employee e : employees) {
+            List<Project> temp = new ArrayList<>(employee.getProjects());
+            temp.retainAll(e.getProjects());
+            if (!temp.isEmpty() && !employee.equals(e))
+                res.add(e);
         }
         return res;
     }
 
-    public Collection<Employee> employeesByTeamLead(Employee lead) throws BadRequestException {
+    public ArrayList<Employee> employeesByTeamLead(Employee lead) throws BadRequestException {
 
         if (lead.getPosition() != Position.TEAM_LEAD)
             throw new BadRequestException("Requested employee is not a team lead: " + lead.getLastName());
@@ -71,14 +71,17 @@ public class EmployeeDAO {
         return employeesByProjectEmployee(lead);
     }
 
-    public Collection<Employee> teamLeadsByEmployee(Employee employee) throws BadRequestException {
+    public ArrayList<Employee> teamLeadsByEmployee(Employee employee) {
+        ArrayList<Employee> res = new ArrayList<>();
 
-        if (employee.getPosition() == Position.TEAM_LEAD)
-            throw new BadRequestException("Requested employee is a team lead: " + employee.getLastName());
+        for (Employee e : employees) {
+            List<Project> temp = new ArrayList<>(employee.getProjects());
+            temp.retainAll(e.getProjects());
 
-        List<Employee> res = new ArrayList<>();
-        for (Employee e : employeesByProjectEmployee(employee)) {
-            if (e.getPosition() == Position.TEAM_LEAD)
+            if (!temp.isEmpty() &&
+                    e.getPosition() == Position.TEAM_LEAD &&
+                    !employee.equals(e))
+
                 res.add(e);
         }
         return res;
