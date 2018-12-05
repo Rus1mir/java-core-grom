@@ -3,9 +3,7 @@ package lesson30.hw;
 import lesson30.hw.exceptions.BadRequestException;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+
 
 public class Controller {
     private CustomerDAO customerDAO;
@@ -42,7 +40,7 @@ public class Controller {
         return employeeDAO.employeesByTeamLead(lead);
     }
 
-    public ArrayList<Employee> teamLeadsByEmployee(Employee employee) throws BadRequestException {
+    public ArrayList<Employee> teamLeadsByEmployee(Employee employee) {
         return employeeDAO.teamLeadsByEmployee(employee);
     }
 
@@ -57,7 +55,7 @@ public class Controller {
     public ArrayList<Employee> employeesByCustomerProjects(Customer customer) {
         ArrayList<Employee> res = new ArrayList<>();
 
-        for(Project proj : projectDAO.projectsByCustomer(customer)) {
+        for (Project proj : projectDAO.projectsByCustomer(customer)) {
             res.addAll(employeeDAO.employeesByProject(proj));
         }
         return res;
