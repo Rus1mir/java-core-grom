@@ -1,4 +1,4 @@
-package lesson32;
+package lesson32.hw2;
 
 import java.io.BufferedReader;
 import java.io.IOException;

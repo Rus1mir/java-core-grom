@@ -1,9 +1,8 @@
-package lesson32;
+package lesson32.hw1;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.Scanner;
 
 public class ReadFromKeyboard {
