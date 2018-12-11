@@ -4,10 +4,13 @@ import java.io.IOException;
 
 public class Demo {
     public static void main(String[] args) throws IOException {
-        ReadFromKeyboard read = new ReadFromKeyboard();
+        //ReadFromKeyboard read = new ReadFromKeyboard();
+        //read.readKeyboardWithScanner();
+        //read.readKeyboardWithIOStream();
 
-        read.readKeyboardWithScanner();
+        Solution solution = new Solution();
+        solution.readNumbers();
 
-        read.readKeyboardWithIOStream();
+
     }
 }
