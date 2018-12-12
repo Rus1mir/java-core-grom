@@ -16,7 +16,7 @@ public class Solution {
             String[] input = reader.readLine().split(" ");
             try {
                 System.out.println("Sum is = " + parseValidateSum(input));
-                counter = 3;
+                break;
             } catch (Exception e) {
                 counter--;
                 if (counter <= 0)
