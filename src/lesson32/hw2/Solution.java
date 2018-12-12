@@ -19,10 +19,13 @@ public class Solution {
                 break;
             } catch (Exception e) {
                 counter--;
-                if (counter <= 0)
+                if (counter <= 0) {
+                    System.out.println("Your numbers are wrong. Number of attempts exceeded");
                     break;
-                System.out.println("Your numbers are wrong. You have " + counter
-                        + " attempts to try again");
+                } else {
+                    System.out.println("Your numbers are wrong. You have " + counter
+                            + " attempts to try again");
+                }
             }
         }
     }
