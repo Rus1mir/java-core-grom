@@ -16,15 +16,11 @@ public class ConsoleWriter {
         String line;
         String content = "";
         try {
-            while ((line = consoleRdr.readLine()) != null) {
-                if (!line.trim().equals(WRITE_SIGN)) {
+            while (!(line = consoleRdr.readLine()).trim().equals(WRITE_SIGN)) {
                     content = content + line + '\n';
-                } else {
-                    appendToFile(path, content);
-                    System.out.println("File " + path + " has been updated successfully");
-                    break;
-                }
             }
+            appendToFile(path, content);
+            System.out.println("File " + path + " has been updated successfully");
         } catch (IOException e) {
             System.err.println(e.getMessage());
         } finally {
