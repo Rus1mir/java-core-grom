@@ -1,4 +1,4 @@
-package lesson33;
+package lesson33.task1;
 
 import org.apache.commons.io.IOUtils;
 
@@ -24,7 +24,7 @@ public class ReadWriteFile {
                 System.out.println(line);
             }
         } catch (IOException e) {
-            System.out.println("Read from file " + path + " is filed");
+            System.err.println("Read from file " + path + " is filed");
         } finally {
             IOUtils.closeQuietly(br);
             IOUtils.closeQuietly(reader);
