@@ -5,16 +5,33 @@ import java.io.*;
 public class Solution {
 
     public static void transferSentences(String fileFromPath, String fileToPath, String word) throws Exception {
-        validate(fileFromPath);
+        // validate(fileFromPath);
 
-        StringBuffer contains = new StringBuffer();
-        StringBuffer notContains = new StringBuffer();
+        StringBuffer original = readFile(fileFromPath);
 
-        sortByContainsWord(readFile(fileFromPath), word, contains, notContains);
+        StringBuffer[] results = sortByContainsWord(original, word);
 
-        writeFile(fileToPath, contains);
+        writeFile(fileToPath, results[0]);
 
-        writeFile(fileFromPath, notContains);
+        try {
+            writeFile(fileFromPath, results[1]);
+        } catch (Exception e) {
+            undo(original, fileFromPath, fileToPath);
+            throw new IOException(e.getMessage());
+        }
+    }
+
+    private static void undo(StringBuffer original, String fromPath, String toPath) throws Exception {
+        File file = new File(toPath);
+
+        if (file.exists())
+            file.delete();
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(fromPath))) {
+            bw.append(original);
+        } catch (IOException e) {
+            throw new IOException("Can't undo file: " + fromPath, e);
+        }
     }
 
     private static StringBuffer readFile(String path) throws Exception {
@@ -33,18 +50,20 @@ public class Solution {
         return res;
     }
 
-    private static void sortByContainsWord(StringBuffer input, String word, StringBuffer contains, StringBuffer notContains) {
+    private static StringBuffer[] sortByContainsWord(StringBuffer input, String word) {
+        StringBuffer[] res = {new StringBuffer(), new StringBuffer()};
 
         for (String s : new String(input).split("\\.")) {
 
             if (s.length() > 10 && s.contains(word)) {
-                contains.append(s);
-                contains.append(".");
+                res[0].append(s);
+                res[0].append(".");
             } else {
-                notContains.append(s);
-                notContains.append(".");
+                res[1].append(s);
+                res[1].append(".");
             }
         }
+        return res;
     }
 
     private static void writeFile(String path, StringBuffer contentToWrite) throws Exception {
