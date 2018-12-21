@@ -28,6 +28,7 @@ public class Demo {
         //testTransferByIdAlreadyExist();
         //testTransferByIdWrongFormat();
         //testTransferByIdNoFound();
+        //testTransferByIdOversize();
     }
 
     static void testCreateFileBigName() throws Exception {
@@ -306,6 +307,24 @@ public class Demo {
         System.out.println(Arrays.deepToString(storage2.getFiles()));
 
         controller.transferFile(storage1, storage2, 300);
+
+        System.out.println(Arrays.deepToString(storage1.getFiles()));
+        System.out.println(Arrays.deepToString(storage2.getFiles()));
+    }
+
+    static void testTransferByIdOversize() throws Exception {
+        System.out.println("Test transfer by id no found");
+        Storage storage1 = new Storage(1001, new File[5], new String[]{"pic", "music", "text"}, "USA", 100);
+        Storage storage2 = new Storage(1002, new File[5], new String[]{"pic", "music", "text"}, "USA", 10);
+        Controller controller = new Controller();
+
+        File file = new File(1200, "file", "music", 20);
+        controller.put(storage1, file);
+
+        System.out.println(Arrays.deepToString(storage1.getFiles()));
+        System.out.println(Arrays.deepToString(storage2.getFiles()));
+
+        controller.transferFile(storage1, storage2, 1200);
 
         System.out.println(Arrays.deepToString(storage1.getFiles()));
         System.out.println(Arrays.deepToString(storage2.getFiles()));

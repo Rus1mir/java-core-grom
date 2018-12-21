@@ -7,7 +7,7 @@ import java.io.*;
 public class ConsoleWriter {
     private static final String WRITE_SIGN = "wr";
 
-    public static void writeToFileFromConsole(String path) {
+    public static void writeToFileFromConsole(String path) throws Exception {
 
         System.out.println("Enter file content to write in the file: " + path);
         InputStreamReader inputStreamReader = new InputStreamReader(System.in);
@@ -22,7 +22,7 @@ public class ConsoleWriter {
             appendToFile(path, content);
             System.out.println("File " + path + " has been updated successfully");
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            throw new IOException("Can't read from console. Can't write to file with path: " + path);
         } finally {
             IOUtils.closeQuietly(consoleRdr);
             IOUtils.closeQuietly(inputStreamReader);
