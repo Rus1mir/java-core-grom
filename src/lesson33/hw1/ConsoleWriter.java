@@ -16,7 +16,7 @@ public class ConsoleWriter {
         String line;
         String content = "";
         try {
-            while ((line = consoleRdr.readLine()).trim().equals(WRITE_SIGN)) {
+            while (!(line = consoleRdr.readLine()).trim().equals(WRITE_SIGN)) {
                     content = content + line + '\n';
             }
             appendToFile(path, content);
