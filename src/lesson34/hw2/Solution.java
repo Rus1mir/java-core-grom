@@ -5,32 +5,24 @@ import java.io.*;
 public class Solution {
 
     public static void transferSentences(String fileFromPath, String fileToPath, String word) throws Exception {
-        // validate(fileFromPath);
+        validate(fileFromPath);
 
         StringBuffer original = readFile(fileFromPath);
-
-        StringBuffer[] results = sortByContainsWord(original, word);
-
-        writeFile(fileToPath, results[0]);
+        StringBuffer left = new StringBuffer(original);
 
         try {
-            writeFile(fileFromPath, results[1]);
+            writeFile(fileToPath, getContains(left, word));
         } catch (Exception e) {
-            undo(original, fileFromPath, fileToPath);
+            new File(fileToPath).delete();
             throw new IOException(e.getMessage());
         }
-    }
 
-    private static void undo(StringBuffer original, String fromPath, String toPath) throws Exception {
-        File file = new File(toPath);
-
-        if (file.exists())
-            file.delete();
-
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(fromPath))) {
-            bw.append(original);
-        } catch (IOException e) {
-            throw new IOException("Can't undo file: " + fromPath, e);
+        try {
+            writeFile(fileFromPath, left);
+        } catch (Exception e) {
+            new File(fileToPath).delete();
+            writeFile(fileFromPath, original);
+            throw new IOException(e.getMessage());
         }
     }
 
@@ -50,17 +42,15 @@ public class Solution {
         return res;
     }
 
-    private static StringBuffer[] sortByContainsWord(StringBuffer input, String word) {
-        StringBuffer[] res = {new StringBuffer(), new StringBuffer()};
+    private static StringBuffer getContains(StringBuffer input, String word) {
+        StringBuffer res = new StringBuffer();
 
         for (String s : new String(input).split("\\.")) {
 
             if (s.length() > 10 && s.contains(word)) {
-                res[0].append(s);
-                res[0].append(".");
-            } else {
-                res[1].append(s);
-                res[1].append(".");
+                res.append(s);
+                res.append(".");
+                input.delete(input.indexOf(s), input.indexOf(s) + s.length() + 1);
             }
         }
         return res;
