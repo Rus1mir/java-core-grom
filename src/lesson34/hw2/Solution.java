@@ -8,17 +8,22 @@ public class Solution {
         validate(fileFromPath);
 
         StringBuffer original = readFile(fileFromPath);
-        StringBuffer left = new StringBuffer(original);
+        StringBuffer noContains = new StringBuffer();
+        StringBuffer contains = new StringBuffer();
 
-        try {
-            writeFile(fileToPath, getContains(left, word));
-        } catch (Exception e) {
-            new File(fileToPath).delete();
-            throw new IOException(e.getMessage());
+        for (String s : new String(original).split("\\.")) {
+            if (s.length() > 10 && s.contains(word)) {
+                contains.append(s);
+                contains.append(".");
+            } else {
+                noContains.append(s);
+                noContains.append(".");
+            }
         }
 
         try {
-            writeFile(fileFromPath, left);
+            writeFile(fileToPath, contains);
+            writeFile(fileFromPath, noContains);
         } catch (Exception e) {
             new File(fileToPath).delete();
             writeFile(fileFromPath, original);
@@ -34,24 +39,8 @@ public class Solution {
             while ((line = br.readLine()) != null) {
                 res.append(line);
             }
-        } catch (FileNotFoundException e) {
-            throw new FileNotFoundException("File: " + path + " does no exist");
         } catch (IOException e) {
             throw new IOException("Can't read file: " + path, e);
-        }
-        return res;
-    }
-
-    private static StringBuffer getContains(StringBuffer input, String word) {
-        StringBuffer res = new StringBuffer();
-
-        for (String s : new String(input).split("\\.")) {
-
-            if (s.length() > 10 && s.contains(word)) {
-                res.append(s);
-                res.append(".");
-                input.delete(input.indexOf(s), input.indexOf(s) + s.length() + 1);
-            }
         }
         return res;
     }
