@@ -1,0 +1,15 @@
+package gromcode.main.lesson11.firstinterface;
+
+public class TestClass implements firstInterface {
+    private int test = 10;
+
+    @Override
+    public void send() {
+
+    }
+
+    @Override
+    public String receive() {
+        return null;
+    }
+}
