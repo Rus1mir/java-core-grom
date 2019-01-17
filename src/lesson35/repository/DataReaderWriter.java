@@ -36,7 +36,6 @@ public class DataReaderWriter {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(path, false))) {
             for (String rec : recordSet) {
                 bw.append(rec);
-                bw.append("\n\r");
             }
         } catch (IOException e) {
             throw new IOException("Can't write file: " + path, e);

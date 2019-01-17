@@ -1,8 +1,10 @@
 package lesson35.model;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Room {
+public class Room implements WritableToCSV {
     private long id;
     private int numberOfGuests;
     private double price;
@@ -18,6 +20,88 @@ public class Room {
         this.breakfastIncluded = breakfastIncluded;
         this.petsAllowed = petsAllowed;
         this.dateAvailableFrom = dateAvailableFrom;
+        this.hotel = hotel;
+    }
+
+    @Override
+    public String fieldsToCSV() {
+        DateFormat df = new SimpleDateFormat("DD-MM-YYYY");
+
+        return String.valueOf(id) + ',' +
+                String.valueOf(numberOfGuests) + ',' +
+                String.valueOf(price) + ',' +
+                String.valueOf(breakfastIncluded) + ',' +
+                String.valueOf(petsAllowed) + ',' +
+                df.format(dateAvailableFrom) + ',' +
+                String.valueOf(hotel.getId());
+    }
+
+    @Override
+    public String toString() {
+        return "Room{" +
+                "id=" + id +
+                ", numberOfGuests=" + numberOfGuests +
+                ", price=" + price +
+                ", breakfastIncluded=" + breakfastIncluded +
+                ", petsAllowed=" + petsAllowed +
+                ", dateAvailableFrom=" + dateAvailableFrom +
+                ", hotel=" + hotel +
+                '}';
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public int getNumberOfGuests() {
+        return numberOfGuests;
+    }
+
+    public void setNumberOfGuests(int numberOfGuests) {
+        this.numberOfGuests = numberOfGuests;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public boolean isBreakfastIncluded() {
+        return breakfastIncluded;
+    }
+
+    public void setBreakfastIncluded(boolean breakfastIncluded) {
+        this.breakfastIncluded = breakfastIncluded;
+    }
+
+    public boolean isPetsAllowed() {
+        return petsAllowed;
+    }
+
+    public void setPetsAllowed(boolean petsAllowed) {
+        this.petsAllowed = petsAllowed;
+    }
+
+    public Date getDateAvailableFrom() {
+        return dateAvailableFrom;
+    }
+
+    public void setDateAvailableFrom(Date dateAvailableFrom) {
+        this.dateAvailableFrom = dateAvailableFrom;
+    }
+
+    public Hotel getHotel() {
+        return hotel;
+    }
+
+    public void setHotel(Hotel hotel) {
         this.hotel = hotel;
     }
 }
