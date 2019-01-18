@@ -25,6 +25,7 @@ public class Room implements WritableToCSV {
 
     @Override
     public String fieldsToCSV() {
+
         DateFormat df = new SimpleDateFormat("DD-MM-YYYY");
 
         return String.valueOf(id) + ',' +

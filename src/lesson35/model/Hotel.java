@@ -1,6 +1,6 @@
 package lesson35.model;
 
-public class Hotel {
+public class Hotel implements WritableToCSV {
     private long id;
     private String name;
     private String country;
@@ -13,6 +13,26 @@ public class Hotel {
         this.country = country;
         this.city = city;
         this.street = street;
+    }
+
+    @Override
+    public String fieldsToCSV() {
+        return String.valueOf(id) + ',' +
+                name + ',' +
+                country + ',' +
+                city + ',' +
+                street;
+    }
+
+    @Override
+    public String toString() {
+        return "Hotel{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", country='" + country + '\'' +
+                ", city='" + city + '\'' +
+                ", street='" + street + '\'' +
+                '}';
     }
 
     public long getId() {

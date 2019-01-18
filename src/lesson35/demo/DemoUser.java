@@ -8,6 +8,6 @@ public class DemoUser {
 
         User user = new User(-1,"fff","ffff", "ff", User.UserType.USER);
         UserRepository userRepository = new UserRepository();
-        userRepository.save(user);
+        System.out.println(userRepository.save(user));
     }
 }
