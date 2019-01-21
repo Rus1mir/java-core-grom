@@ -18,7 +18,7 @@ public class DataReaderWriter {
         return data;
     }
 
-    private static ArrayList<String> getRecords(String path) throws Exception {
+    public static ArrayList<String> getRecords(String path) throws Exception {
         String line;
         ArrayList<String> recordSet = new ArrayList<String>();
 
