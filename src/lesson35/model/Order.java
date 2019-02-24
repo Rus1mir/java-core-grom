@@ -4,7 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Order implements WritableToCSV {
+public class Order {
     private long id;
     private User user;
     private Room room;
@@ -21,9 +21,8 @@ public class Order implements WritableToCSV {
         this.moneyPaid = moneyPaid;
     }
 
-
     @Override
-    public String fieldsToCSV() {
+    public String toString() {
 
         DateFormat df = new SimpleDateFormat("DD-MM-YYYY");
 
@@ -33,18 +32,6 @@ public class Order implements WritableToCSV {
                 df.format(dateFrom) + ',' +
                 df.format(dateTo) + ',' +
                 String.valueOf(moneyPaid);
-    }
-
-    @Override
-    public String toString() {
-        return "Order{" +
-                "id=" + id +
-                ", user=" + user +
-                ", room=" + room +
-                ", dateFrom=" + dateFrom +
-                ", dateTo=" + dateTo +
-                ", moneyPaid=" + moneyPaid +
-                '}';
     }
 
     public long getId() {

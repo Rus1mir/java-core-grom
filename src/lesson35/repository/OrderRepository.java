@@ -11,6 +11,10 @@ public class OrderRepository {
     public Order save(Order order) throws Exception {
 
         order.setId(Math.abs(new Random().nextLong()));
-        return (Order) DataReaderWriter.save(order, PATH);
+        return DataReaderWriter.save(order, PATH);
+    }
+
+    public void deleteOrder(Long orderId) throws Exception{
+        DataReaderWriter.deleteRecordById(PATH, orderId);
     }
 }

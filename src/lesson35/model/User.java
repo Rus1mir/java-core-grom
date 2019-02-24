@@ -1,6 +1,6 @@
 package lesson35.model;
 
-public class User implements WritableToCSV {
+public class User {
 
     private long id;
     private String userName;
@@ -15,6 +15,16 @@ public class User implements WritableToCSV {
         this.country = country;
         this.userType = userType;
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(id) + ',' +
+                userName + ',' +
+                password + ',' +
+                country + ',' +
+                userType;
+    }
+
 
     public long getId() {
         return id;
@@ -54,15 +64,6 @@ public class User implements WritableToCSV {
 
     public void setUserType(UserType userType) {
         this.userType = userType;
-    }
-
-    @Override
-    public String fieldsToCSV() {
-        return String.valueOf(id) + ',' +
-                userName + ',' +
-                password + ',' +
-                country + ',' +
-                userType;
     }
 
     public enum UserType {ADMIN, USER}

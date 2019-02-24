@@ -1,6 +1,5 @@
 package lesson35.repository;
 
-import lesson35.exception.DataFormatErrorException;
 import lesson35.model.Hotel;
 
 import java.util.ArrayList;
@@ -10,33 +9,35 @@ public class HotelRepository {
 
     private final String PATH = "D:/HotelDb.txt";
 
-    public Hotel save(Hotel hotel) throws Exception {
+    public ArrayList<Hotel> findHotelsByName(String name) throws Exception {
+
+        String[] filter = new String[]{null, name, null, null, null};
+        return getFromRecordset(DataReaderWriter.getRecordsByFilter(PATH, filter));
+    }
+
+    public ArrayList<Hotel> findHotelsByCity(String city) throws Exception {
+
+        String[] filter = new String[]{null, null, null, city, null};
+        return getFromRecordset(DataReaderWriter.getRecordsByFilter(PATH, filter));
+    }
+
+    public Hotel addHotel(Hotel hotel) throws Exception {
 
         hotel.setId(Math.abs(new Random().nextLong()));
-        return (Hotel) DataReaderWriter.save(hotel, PATH);
+        return DataReaderWriter.save(hotel, PATH);
     }
 
-    public ArrayList<Hotel> getHotelByName(String name) throws Exception {
+    public void deleteHotel(long hotelId) throws Exception {
+        DataReaderWriter.deleteRecordById(PATH, hotelId);
+    }
 
-        ArrayList<Hotel> res = new ArrayList<Hotel>();
+    private ArrayList<Hotel> getFromRecordset(ArrayList<String[]> recordset) throws Exception {
 
-        for (String rec : DataReaderWriter.getRecords(PATH)) {
-            String[] fields = rec.split(",");
-            if (name.equals(fields[1])) {
-                res.add(getHotelFromFields(fields));
-            }
+        ArrayList<Hotel> res = new ArrayList<>();
+
+        for (String[] rec : recordset) {
+            res.add(new Hotel(rec));
         }
         return res;
-    }
-
-    private Hotel getHotelFromFields(String[] fields) throws Exception {
-        long id = 0;
-        try{
-            id = Long.parseLong(fields[0]);
-        }catch (Exception e) {
-            new DataFormatErrorException("Can't create object 'Hotel' cause wrong id field");
-        }
-
-        return new Hotel(id, fields[1], fields[2], fields[3], fields[4]);
     }
 }

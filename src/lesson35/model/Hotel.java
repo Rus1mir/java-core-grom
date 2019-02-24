@@ -1,6 +1,8 @@
 package lesson35.model;
 
-public class Hotel implements WritableToCSV {
+import lesson35.exception.DataFormatErrorException;
+
+public class Hotel {
     private long id;
     private String name;
     private String country;
@@ -15,24 +17,26 @@ public class Hotel implements WritableToCSV {
         this.street = street;
     }
 
+    public Hotel(String[] fields) throws Exception {
+
+        try{
+            this.id = Long.parseLong(fields[0]);
+            this.name = fields[1];
+            this.country = fields[2];
+            this.city = fields[3];
+            this.street = fields[4];
+        }catch (Exception e) {
+            throw new DataFormatErrorException("Can't create object 'Hotel', one or many fields is incorrect", e);
+        }
+    }
+
     @Override
-    public String fieldsToCSV() {
+    public String toString() {
         return String.valueOf(id) + ',' +
                 name + ',' +
                 country + ',' +
                 city + ',' +
                 street;
-    }
-
-    @Override
-    public String toString() {
-        return "Hotel{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", country='" + country + '\'' +
-                ", city='" + city + '\'' +
-                ", street='" + street + '\'' +
-                '}';
     }
 
     public long getId() {
