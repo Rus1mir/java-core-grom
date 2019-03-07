@@ -43,7 +43,6 @@ public class DataReaderWriter {
         ArrayList<String[]> res = new ArrayList<String[]>();
 
         String line;
-        int index = 0;
 
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             while ((line = br.readLine()) != null) {
@@ -85,7 +84,7 @@ public class DataReaderWriter {
         validate(path);
 
         String line;
-        ArrayList<String> recordSet = new ArrayList<String>();
+        ArrayList<String> recordSet = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             while ((line = br.readLine()) != null) {
