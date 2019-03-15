@@ -1,7 +1,10 @@
 package lesson35.model;
 
+import lesson35.exception.DataFormatErrorException;
+
 public class User {
 
+    private static long loginedId = -1;
     private long id;
     private String userName;
     private String password;
@@ -16,6 +19,30 @@ public class User {
         this.userType = userType;
     }
 
+    public User (String fields[]) throws DataFormatErrorException {
+        try {
+            this.id = Long.parseLong(fields[0]);
+            this.userName = fields[1];
+            this.password = fields[2];
+            this.country = fields[3];
+            this.userType = UserType.valueOf(fields[4]);
+        } catch (Exception e) {
+            throw new DataFormatErrorException("Can't create object 'Room', one or many fields is incorrect", e);
+        }
+    }
+
+    public static void login(long userId) {
+        loginedId = userId;
+    }
+
+    public static void logout() {
+        loginedId = -1;
+    }
+
+    public static boolean isLogined (Long userId) {
+        return userId == loginedId;
+    }
+
     @Override
     public String toString() {
         return String.valueOf(id) + ',' +
@@ -24,7 +51,6 @@ public class User {
                 country + ',' +
                 userType;
     }
-
 
     public long getId() {
         return id;

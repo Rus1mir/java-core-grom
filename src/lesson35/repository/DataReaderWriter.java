@@ -1,6 +1,7 @@
 package lesson35.repository;
 
 import lesson35.exception.DataFormatErrorException;
+
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -75,7 +76,8 @@ public class DataReaderWriter {
         int index = 0;
 
         for (String f : filter) {
-            res &= (f == null || fields[index++].equals(f));
+            res &= (f == null || fields[index].equals(f));
+            index++;
         }
         return res;
     }
@@ -108,11 +110,21 @@ public class DataReaderWriter {
     }
 
     private static void appendRecord(String line, String path) throws Exception {
+
+        validateEmptyFields(line);
+
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(path, true))) {
             bw.append(line);
             bw.append("\n");
         } catch (IOException e) {
             throw new IOException("Can't append record file: " + path, e);
+        }
+    }
+
+    private static void validateEmptyFields(String fieldsLine) throws Exception {
+        for (String f : fieldsLine.split(",")) {
+            if (f.trim().equals(""))
+                throw new DataFormatErrorException("Empty fields detected, can't save data");
         }
     }
 }
