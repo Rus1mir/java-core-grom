@@ -1,10 +1,8 @@
 package lesson35.model;
 
-
-import lesson35.exception.DataFormatErrorException;
+import lesson35.repository.GeneralRepo;
 
 import java.util.Date;
-import static lesson35.repository.DataReaderWriter.DATE_FORMAT;
 
 public class Room {
     private long id;
@@ -27,34 +25,16 @@ public class Room {
         this.hotel = hotel;
     }
 
-    public Room(String[] fields, Hotel hotel) throws Exception{
-
-        if (fields.length != 7)
-            throw new DataFormatErrorException("Can't create object 'Hotel', number of fields id incorrect");
-
-        try {
-            this.id = Long.parseLong(fields[0]);
-            this.numberOfGuests = Integer.parseInt(fields[1]);
-            this.price = Double.parseDouble(fields[2]);
-            this.breakfastIncluded = Boolean.parseBoolean(fields[3]);
-            this.petsAllowed = Boolean.parseBoolean(fields[4]);
-            this.dateAvailableFrom = DATE_FORMAT.parse(fields[5]);
-            this.hotel = hotel;
-        } catch (Exception e) {
-            throw new DataFormatErrorException("Can't create object 'Room', one or many fields is incorrect", e);
-        }
-    }
-
     @Override
     public String toString() {
 
         return String.valueOf(id) + ',' +
-                String.valueOf(numberOfGuests) + ',' +
-                String.valueOf(price) + ',' +
-                String.valueOf(breakfastIncluded) + ',' +
-                String.valueOf(petsAllowed) + ',' +
-                DATE_FORMAT.format(dateAvailableFrom) + ',' +
-                String.valueOf(hotel.getId());
+                numberOfGuests + ',' +
+                price + ',' +
+                breakfastIncluded + ',' +
+                petsAllowed + ',' +
+                GeneralRepo.DATE_FORMAT.format(dateAvailableFrom) + ',' +
+                hotel.getId();
     }
 
     public long getId() {

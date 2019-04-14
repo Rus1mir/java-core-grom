@@ -1,43 +1,54 @@
 package lesson35.repository;
 
+import lesson35.exception.DataFormatErrorException;
 import lesson35.model.Hotel;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-public class HotelRepository {
+public class HotelRepository extends GeneralRepo<Hotel> {
 
-    private final String PATH = "D:/HotelDb.txt";
+    public HotelRepository() {
+        super.path = "C:/javaExercises/project/HotelDb.txt";
+    }
 
     public ArrayList<Hotel> findHotelsByName(String name) throws Exception {
 
         String[] filter = new String[]{null, name, null, null, null};
-        return getFromRecordset(DataReaderWriter.getRecordsByFilter(PATH, filter));
+        return getObjectsByFilter(filter);
     }
 
     public ArrayList<Hotel> findHotelsByCity(String city) throws Exception {
 
         String[] filter = new String[]{null, null, null, city, null};
-        return getFromRecordset(DataReaderWriter.getRecordsByFilter(PATH, filter));
+        return getObjectsByFilter(filter);
     }
 
     public Hotel addHotel(Hotel hotel) throws Exception {
 
         hotel.setId(Math.abs(new Random().nextLong()));
-        return DataReaderWriter.save(hotel, PATH);
+        return save(hotel);
     }
 
     public void deleteHotel(long hotelId) throws Exception {
-        DataReaderWriter.deleteRecordById(PATH, hotelId);
+        deleteRecordById(hotelId);
     }
 
-    private ArrayList<Hotel> getFromRecordset(ArrayList<String[]> recordset) throws Exception {
-
-        ArrayList<Hotel> res = new ArrayList<>();
-
-        for (String[] rec : recordset) {
-            res.add(new Hotel(rec));
+    @Override
+    protected Hotel createObjFromFields(String[] fields) throws Exception {
+        //validateFields(fields);
+        try {
+            return new Hotel(Long.parseLong(fields[0]), fields[1], fields[2], fields[3], fields[4]);
+        } catch (NumberFormatException e) {
+            throw new DataFormatErrorException("Wrong Id field format detected");
         }
-        return res;
+    }
+
+    @Override
+    protected void validateFields(String[] fields) throws Exception {
+        for(String f : fields) {
+            if (f.trim().equals(""))
+                throw new DataFormatErrorException("Empty fields detected");
+        }
     }
 }

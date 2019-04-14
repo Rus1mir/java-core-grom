@@ -17,19 +17,6 @@ public class Hotel {
         this.street = street;
     }
 
-    public Hotel(String[] fields) throws Exception {
-
-        try{
-            this.id = Long.parseLong(fields[0]);
-            this.name = fields[1];
-            this.country = fields[2];
-            this.city = fields[3];
-            this.street = fields[4];
-        }catch (Exception e) {
-            throw new DataFormatErrorException("Can't create object 'Hotel', one or many fields is incorrect", e);
-        }
-    }
-
     @Override
     public String toString() {
         return String.valueOf(id) + ',' +

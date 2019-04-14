@@ -6,7 +6,7 @@ import lesson35.repository.UserRepository;
 
 public class DemoUser {
     public static void main(String[] args) throws Exception{
-        //userRepoSave();
+
         //userControllerReg();
         userControllerLogin();
     }
@@ -26,15 +26,8 @@ public class DemoUser {
 
     private static void userControllerReg() throws Exception {
 
-        User user = new User(-1,"John","23", "USA", User.UserType.USER);
+        User user = new User(-1,"John","213", "USA", User.UserType.USER);
         UserController userController = new UserController();
         System.out.println(userController.registerUser(user));
-    }
-
-    private static void userRepoSave() throws Exception {
-
-        User user = new User(-1,"Peter","12345", "USA", User.UserType.USER);
-        UserRepository userRepository = new UserRepository();
-        System.out.println(userRepository.save(user));
     }
 }

@@ -6,8 +6,8 @@ import lesson35.repository.HotelRepository;
 public class DemoHotel {
     public static void main(String[] args) throws Exception {
         //saveHotel();
-        //getHotelsByName();
-        delete(3567874312275730273L);
+        getHotelsByName();
+        //delete(4608244328610672536L);
     }
 
     private static void saveHotel() throws Exception {
@@ -18,7 +18,7 @@ public class DemoHotel {
 
     private static void getHotelsByName() throws Exception {
         HotelRepository repository = new HotelRepository();
-        System.out.println(repository.findHotelsByName("Stolichny"));
+        System.out.println(repository.findHotelsByName("Stolichnya"));
     }
 
     private static void getHotelsByCity() throws Exception {

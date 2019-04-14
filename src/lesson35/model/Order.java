@@ -1,5 +1,7 @@
 package lesson35.model;
 
+import lesson35.repository.GeneralRepo;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,14 +26,12 @@ public class Order {
     @Override
     public String toString() {
 
-        DateFormat df = new SimpleDateFormat("DD-MM-YYYY");
-
         return String.valueOf(id) + ',' +
-                String.valueOf(user.getId()) + ',' +
-                String.valueOf(room.getId()) + ',' +
-                df.format(dateFrom) + ',' +
-                df.format(dateTo) + ',' +
-                String.valueOf(moneyPaid);
+                user.getId() + ',' +
+                room.getId() + ',' +
+                GeneralRepo.DATE_FORMAT.format(dateFrom) + ',' +
+                GeneralRepo.DATE_FORMAT.format(dateTo) + ',' +
+                moneyPaid;
     }
 
     public long getId() {
