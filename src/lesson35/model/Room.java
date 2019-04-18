@@ -4,8 +4,8 @@ import lesson35.repository.GeneralRepo;
 
 import java.util.Date;
 
-public class Room {
-    private long id;
+public class Room extends Entity {
+
     private int numberOfGuests;
     private double price;
     private boolean breakfastIncluded;
@@ -13,10 +13,9 @@ public class Room {
     private Date dateAvailableFrom;
     private Hotel hotel;
 
-    public Room(long id, int numberOfGuests, double price,
-                boolean breakfastIncluded, boolean petsAllowed, Date dateAvailableFrom, Hotel hotel) {
+    public Room(long id, int numberOfGuests, double price, boolean breakfastIncluded, boolean petsAllowed, Date dateAvailableFrom, Hotel hotel) {
 
-        this.id = id;
+        super(id);
         this.numberOfGuests = numberOfGuests;
         this.price = price;
         this.breakfastIncluded = breakfastIncluded;
@@ -35,14 +34,6 @@ public class Room {
                 petsAllowed + ',' +
                 GeneralRepo.DATE_FORMAT.format(dateAvailableFrom) + ',' +
                 hotel.getId();
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public int getNumberOfGuests() {

@@ -2,12 +2,9 @@ package lesson35.model;
 
 import lesson35.repository.GeneralRepo;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Order {
-    private long id;
+public class Order extends Entity {
     private User user;
     private Room room;
     private Date dateFrom;
@@ -15,7 +12,7 @@ public class Order {
     private double moneyPaid;
 
     public Order(long id, User user, Room room, Date dateFrom, Date dateTo, double moneyPaid) {
-        this.id = id;
+        super(id);
         this.user = user;
         this.room = room;
         this.dateFrom = dateFrom;
@@ -32,14 +29,6 @@ public class Order {
                 GeneralRepo.DATE_FORMAT.format(dateFrom) + ',' +
                 GeneralRepo.DATE_FORMAT.format(dateTo) + ',' +
                 moneyPaid;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public User getUser() {

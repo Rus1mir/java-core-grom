@@ -1,43 +1,56 @@
 package lesson35.repository;
 
-import lesson35.exception.UserAlreadyExistException;
+import lesson35.exception.ReferenceException;
 import lesson35.exception.DataFormatErrorException;
+import lesson35.model.Order;
 import lesson35.model.User;
 
 import java.util.ArrayList;
-import java.util.Random;
 
-public class UserRepository extends GeneralRepo<User>{
+
+public class UserRepository extends GeneralRepo<User> {
+
+    private static User loginedUser;
 
     public UserRepository() {
-        super.path = "C:/javaExercises/project/UserDb.txt";
+        super("C:/javaExercises/project/UserDb.txt", 5);
     }
 
-    public User addUser(User user) throws Exception {
+    public static boolean isLogined() {
+        return (loginedUser != null);
+    }
 
-        if (getUserByNameAndPass(user.getUserName(), user.getPassword()) != null)
-            throw new UserAlreadyExistException("UserRepository addUser method returns exception. User this name: " +
-                    user.getUserName() + " and pass: " + user.getPassword() + " already exist, save is not possible.");
+    public static boolean isAdmin() {
+        return (loginedUser != null && loginedUser.getUserType() == User.UserType.ADMIN);
+    }
 
-        user.setId(Math.abs(new Random().nextLong()));
-        return save(user);
+    public void login(User user) {
+
+        if (loginedUser != null && user.getId() == loginedUser.getId()) {
+            System.out.println("User with id " + user.getId() + " was already login");
+            return;
+        }
+
+        loginedUser = user;
+    }
+
+    public void logout() {
+        loginedUser = null;
     }
 
     public User getUserByNameAndPass(String name, String password) throws Exception {
 
-        String userFilter[] = {null, name, password, null, null};
-        ArrayList<User> res = getObjectsByFilter(userFilter);
+        for (User user : getObjectsFromDb()) {
 
-        if (res.size() > 0) {
-            return res.get(0);
+            if (user.getUserName().equals(name) && user.getPassword().equals(password))
+                return user;
         }
-
         return null;
     }
 
     @Override
-    protected User createObjFromFields(String[] fields) throws Exception {
-        //validateFields(fields);
+    protected User mapping(String[] fields) throws Exception {
+
         try {
             return new User(Long.parseLong(fields[0]), fields[1], fields[2], fields[3], User.UserType.valueOf(fields[4]));
         } catch (NumberFormatException e) {
@@ -46,11 +59,13 @@ public class UserRepository extends GeneralRepo<User>{
     }
 
     @Override
-    protected void validateFields(String[] fields) throws Exception {
+    protected void checkReferences(User object) throws Exception {
+        ArrayList<Order> orders = new OrderRepository().getObjectsFromDb();
 
-        for(String f : fields) {
-            if (f.trim().equals(""))
-                throw new DataFormatErrorException("Empty fields detected");
+        for (Order order : orders) {
+            if (order.getRoom().getId() == object.getId())
+                throw new ReferenceException("Removing User " + object.getId() +
+                        " was failed cause one of some orders still has reference to it");
         }
     }
 }

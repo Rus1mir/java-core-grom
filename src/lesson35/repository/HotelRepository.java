@@ -1,42 +1,46 @@
 package lesson35.repository;
 
 import lesson35.exception.DataFormatErrorException;
+import lesson35.exception.ReferenceException;
 import lesson35.model.Hotel;
+import lesson35.model.Room;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class HotelRepository extends GeneralRepo<Hotel> {
 
     public HotelRepository() {
-        super.path = "C:/javaExercises/project/HotelDb.txt";
+
+        super("C:/javaExercises/project/HotelDb.txt", 5);
     }
 
     public ArrayList<Hotel> findHotelsByName(String name) throws Exception {
 
-        String[] filter = new String[]{null, name, null, null, null};
-        return getObjectsByFilter(filter);
+        ArrayList<Hotel> res = new ArrayList<>();
+
+        for(Hotel h : getObjectsFromDb()){
+
+            if (h.getName().equals(name))
+                res.add(h);
+        }
+        return res;
     }
 
     public ArrayList<Hotel> findHotelsByCity(String city) throws Exception {
 
-        String[] filter = new String[]{null, null, null, city, null};
-        return getObjectsByFilter(filter);
-    }
+        ArrayList<Hotel> res = new ArrayList<>();
 
-    public Hotel addHotel(Hotel hotel) throws Exception {
+        for(Hotel h : getObjectsFromDb()){
 
-        hotel.setId(Math.abs(new Random().nextLong()));
-        return save(hotel);
-    }
-
-    public void deleteHotel(long hotelId) throws Exception {
-        deleteRecordById(hotelId);
+            if (h.getCity().equals(city))
+                res.add(h);
+        }
+        return res;
     }
 
     @Override
-    protected Hotel createObjFromFields(String[] fields) throws Exception {
-        //validateFields(fields);
+    protected Hotel mapping(String[] fields) throws Exception {
+
         try {
             return new Hotel(Long.parseLong(fields[0]), fields[1], fields[2], fields[3], fields[4]);
         } catch (NumberFormatException e) {
@@ -45,10 +49,15 @@ public class HotelRepository extends GeneralRepo<Hotel> {
     }
 
     @Override
-    protected void validateFields(String[] fields) throws Exception {
-        for(String f : fields) {
-            if (f.trim().equals(""))
-                throw new DataFormatErrorException("Empty fields detected");
+    protected void checkReferences(Hotel object) throws Exception {
+
+        ArrayList<Room> rooms = new RoomRepository().getObjectsFromDb();
+
+        for (Room room : rooms) {
+            if (room.getHotel().getId() == object.getId())
+                throw new ReferenceException("Removing Hotel " + object.getId() +
+                        " was failed cause one of some rooms still has reference to it");
         }
+        //Maybe delete this rooms looks better, but now exception only
     }
 }

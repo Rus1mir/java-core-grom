@@ -1,66 +1,40 @@
 package lesson35.repository;
 
 import lesson35.exception.DataFormatErrorException;
+import lesson35.exception.ReferenceException;
 import lesson35.model.Filter;
 import lesson35.model.Hotel;
+import lesson35.model.Order;
 import lesson35.model.Room;
-import java.util.ArrayList;
-import java.util.Random;
 
+import java.util.ArrayList;
 
 
 public class RoomRepository extends GeneralRepo<Room> {
 
-    private HotelRepository hotelRepo = new HotelRepository();
-
     public RoomRepository() {
-        super.path = "C:/javaExercises/project/RoomDb.txt";
-    }
-
-    public Room addRoom(Room room) throws Exception {
-
-        room.setId(Math.abs(new Random().nextLong()));
-        return save(room);
-    }
-
-    public void deleteRoom(long id) throws Exception {
-        deleteRecordById(id);
+        super("C:/javaExercises/project/RoomDb.txt", 7);
     }
 
     public ArrayList<Room> findRoomsByFilter(Filter filter) throws Exception {
 
+        ArrayList<Room> rooms = getObjectsFromDb();
         ArrayList<Room> res = new ArrayList<>();
 
-        String[] roomFilter = {null,
-                filter.getNumberOfGuests().toString(),
-                filter.getPrice().toString(),
-                filter.getBreakfastIncluded().toString(),
-                filter.getPetsAllowed().toString(),
-                filter.getDateAvailableFrom().toString(),
-                null};
-
-        String[] hotelFilter = {null,
-                null,
-                filter.getCountry(),
-                filter.getCity(),
-                null};
-
-        ArrayList<Room> preFilteredRooms = getObjectsByFilter(roomFilter);
-        ArrayList<Hotel> preFilteredHotels = hotelRepo.getObjectsByFilter(hotelFilter);
-
-        for (Room room : preFilteredRooms) {
-            for (Hotel hotel : preFilteredHotels) {
-                if (room.getHotel().getId() == hotel.getId())
-                    res.add(room);
-            }
+        for (Room r : rooms) {
+            if (filter.equals(r))
+                res.add(r);
         }
-
         return res;
     }
 
     @Override
-    protected Room createObjFromFields(String[] fields) throws Exception {
-        //validateFields(fields);
+    protected Room mapping(String[] fields) throws Exception {
+
+        Hotel hotel = new HotelRepository().getObjectByID(Long.parseLong(fields[6]));
+
+        if (hotel == null) throw new ReferenceException("Hotel with id " + fields[6] + " was no found in HotelDB");
+
         try {
             return new Room(Long.parseLong(fields[0]),
                     Integer.parseInt(fields[1]),
@@ -68,14 +42,21 @@ public class RoomRepository extends GeneralRepo<Room> {
                     Boolean.parseBoolean(fields[3]),
                     Boolean.parseBoolean(fields[4]),
                     DATE_FORMAT.parse(fields[5]),
-                    hotelRepo.getObjectById(Long.parseLong(fields[6])));
+                    hotel);
         } catch (NumberFormatException e) {
             throw new DataFormatErrorException("Wrong field format detected");
         }
     }
 
     @Override
-    protected void validateFields(String[] fields) throws Exception {
+    protected void checkReferences(Room object) throws Exception {
 
+        ArrayList<Order> orders = new OrderRepository().getObjectsFromDb();
+
+        for (Order order : orders) {
+            if (order.getRoom().getId() == object.getId())
+                throw new ReferenceException("Removing Room " + object.getId() +
+                        " was failed cause one of some orders still has reference to it");
+        }
     }
 }

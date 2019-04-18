@@ -1,34 +1,18 @@
 package lesson35.model;
 
-import lesson35.exception.DataFormatErrorException;
+public class User extends Entity {
 
-public class User {
-
-    private static long loginedId = -1;
-    private long id;
     private String userName;
     private String password;
     private String country;
     private UserType userType;
 
     public User(long id, String userName, String password, String country, UserType userType) {
-        this.id = id;
+        super(id);
         this.userName = userName;
         this.password = password;
         this.country = country;
         this.userType = userType;
-    }
-
-    public static void login(long userId) {
-        loginedId = userId;
-    }
-
-    public static void logout() {
-        loginedId = -1;
-    }
-
-    public static boolean isLogined (Long userId) {
-        return userId == loginedId;
     }
 
     @Override
@@ -38,14 +22,6 @@ public class User {
                 password + ',' +
                 country + ',' +
                 userType;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getUserName() {

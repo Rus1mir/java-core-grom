@@ -19,4 +19,13 @@ public class HotelController {
         return hotelService.findHotelsByCity(city);
     }
 
+    public Hotel addHotel(Hotel hotel) throws Exception {
+
+        return hotelService.addHotel(hotel);
+    }
+
+    public void deleteHotel(long hotelId) throws Exception {
+
+        hotelService.deleteHotel(hotelId);
+    }
 }

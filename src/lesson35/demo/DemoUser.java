@@ -7,27 +7,21 @@ import lesson35.repository.UserRepository;
 public class DemoUser {
     public static void main(String[] args) throws Exception{
 
-        //userControllerReg();
-        userControllerLogin();
+        //userRegister();
+        userLogin();
     }
 
-    private static void userControllerLogin() throws Exception {
+    private static void userRegister() throws Exception {
 
-        UserRepository repository = new UserRepository();
-        User user = repository.getUserByNameAndPass("Janet", "6456");
-
-        UserController userController = new UserController();
-        userController.login("Janet", "6456");
-        System.out.println(User.isLogined(user.getId()));
-
-        userController.logout();
-        System.out.println(User.isLogined(user.getId()));
-    }
-
-    private static void userControllerReg() throws Exception {
-
-        User user = new User(-1,"John","213", "USA", User.UserType.USER);
+        User user = new User(-1,"Joann","1234", "USA", User.UserType.USER);
         UserController userController = new UserController();
         System.out.println(userController.registerUser(user));
+    }
+
+    private static void userLogin() throws Exception {
+
+        UserController userController = new UserController();
+        //userController.login("Janet", "12");
+        userController.login("Joann", "1234");
     }
 }

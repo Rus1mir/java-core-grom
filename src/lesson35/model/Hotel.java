@@ -1,16 +1,13 @@
 package lesson35.model;
 
-import lesson35.exception.DataFormatErrorException;
-
-public class Hotel {
-    private long id;
+public class Hotel extends Entity {
     private String name;
     private String country;
     private String city;
     private String street;
 
     public Hotel(long id, String name, String country, String city, String street) {
-        this.id = id;
+        super(id);
         this.name = name;
         this.country = country;
         this.city = city;
@@ -24,14 +21,6 @@ public class Hotel {
                 country + ',' +
                 city + ',' +
                 street;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getName() {

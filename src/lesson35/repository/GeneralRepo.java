@@ -1,106 +1,119 @@
 package lesson35.repository;
 
 import lesson35.exception.DataFormatErrorException;
+import lesson35.model.Entity;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-public abstract class GeneralRepo<T> {
+public abstract class GeneralRepo<T extends Entity> {
+
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("DD-MM-YYYY");
+    private String path;
+    private int fieldsCount;
 
-    protected String path;
+    protected GeneralRepo(String path, int fieldsCount) {
+        this.path = path;
+        this.fieldsCount = fieldsCount;
+    }
 
-    protected T save(T data) throws Exception {
-        String line = data.toString();
+    public T addObjectToDb(T data) throws Exception {
+
         validateFiles();
+
+        String line = data.toString();
+
+        validateFields(line.split(","));
+
+        data.generateId();
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(path, true))) {
             bw.append(data.toString());
             bw.append("\n");
         } catch (IOException e) {
-            throw new IOException("Can't append record file: " + path, e);
+            throw new IOException("Can't append file: " + path + " with save " + data, e);
         }
         return data;
     }
 
-    protected T getObjectById(long id) throws Exception {
-        int index = 0;
-        ArrayList<String> recordset = getRecords();
+    public ArrayList<T> getObjectsFromDb() throws Exception {
 
-        for (String rec : recordset) {
-            long id1;
+        ArrayList<T> objects = new ArrayList<>();
 
-            try {
-                id1 = Long.parseLong(rec.substring(0, rec.indexOf(',')));
-            } catch (Exception e) {
-                throw new DataFormatErrorException("Incorrect format field Id in file: " + path + " line: " + index);
-            }
+        for (String rec : getRecords()) {
 
-            if (id == id1) {
-                return createObjFromFields(recordset.get(index).split(","));
-            }
-            index++;
+            String[] fields = rec.split(",");
+            validateFields(fields);
+
+            objects.add(mapping(fields));
         }
-        return null;
+        return objects;
     }
 
-    protected void deleteRecordById(long id) throws Exception {
-
-        int index = 0;
-        ArrayList<String> recordset = getRecords();
-
-        for (String rec : recordset) {
-            long id1;
-
-            try {
-                id1 = Long.parseLong(rec.substring(0, rec.indexOf(',')));
-            } catch (Exception e) {
-                throw new DataFormatErrorException("Incorrect format field Id in file: " + path + " line: " + index);
-            }
-
-            if (id == id1) {
-                recordset.remove(index);
-                break;
-            }
-            index++;
-        }
-        saveRecords(recordset);
-    }
-
-    protected ArrayList<T> getObjectsByFilter(String[] filter) throws Exception {
+    public T getObjectByID(long id) throws Exception {
         validateFiles();
 
-        ArrayList<T> res = new ArrayList<>();
-        int index = 0;
         String line;
 
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
-
             while ((line = br.readLine()) != null) {
 
                 String[] fields = line.split(",");
 
                 validateFields(fields);
 
-                if (matchFilter(fields, filter)) {
-                    res.add(createObjFromFields(fields));
-                }
-                index++;
+                T obj = mapping(fields);
+
+                if (obj.getId() == id) return obj;
             }
         } catch (IOException e) {
             throw new IOException("Can't read file: " + path, e);
-
-        } catch (DataFormatErrorException e) {
-            throw new DataFormatErrorException("GeneralRepo getObjectsByFilter method returns exception." +
-                    " Wrong format of data field, method can`t create object from file: " + path + " line " + index, e);
         }
-        return res;
+
+        System.out.println("No object id: " + id + " found in " + new File(path).getName());
+        return null;
     }
 
-    protected abstract T createObjFromFields(String[] fields) throws Exception;
+    public void deleteObjectByID(long id) throws Exception {
 
-    protected abstract void validateFields(String[] fields) throws Exception;
+        ArrayList<String> records = getRecords();
+
+        for (String rec : records) {
+
+            String[] fields = rec.split(",");
+            validateFields(fields);
+
+            T object = mapping(fields);
+
+            if (object.getId() == id) {
+
+                checkReferences(object);
+
+                records.remove(rec);
+                saveRecords(records);
+                return;
+            }
+        }
+        System.out.println("No object id: " + id + " found in " + new File(path).getName());
+    }
+
+    //Specific mapping of entities must be implemented
+    protected abstract T mapping(String[] fields) throws Exception;
+
+    protected abstract void checkReferences(T object) throws Exception;
+
+    //Validate, may be overrated
+    protected void validateFields(String[] fields) throws Exception {
+
+        if (fields.length != fieldsCount)
+            throw new DataFormatErrorException("Number of fields is wrong, required: " + fieldsCount);
+
+        for (String f : fields) {
+            if (f.trim().isEmpty())
+                throw new DataFormatErrorException("Empty field detected");
+        }
+    }
 
     //Not public
     private void validateFiles() throws Exception {
@@ -108,27 +121,13 @@ public abstract class GeneralRepo<T> {
 
         if (!file.exists()) throw new FileNotFoundException("File " + file.getPath() + " does not exist");
 
-        if (!file.canRead()) throw new Exception("File: " + file.getPath() + " does no permissions to read");
+        if (!file.canRead()) throw new IOException("File: " + file.getPath() + " does no permissions to read");
 
-        if (!file.canWrite()) throw new Exception("File: " + file.getPath() + " does no permissions to write");
-    }
-
-    private boolean matchFilter(String[] fields, String[] filter) throws Exception {
-
-        if (fields.length != filter.length)
-            throw new DataFormatErrorException("Number of fields is incorrect");
-
-        boolean res = true;
-        int index = 0;
-
-        for (String f : filter) {
-            res &= (f == null || fields[index].equals(f));
-            index++;
-        }
-        return res;
+        if (!file.canWrite()) throw new IOException("File: " + file.getPath() + " does no permissions to write");
     }
 
     private ArrayList<String> getRecords() throws Exception {
+
         validateFiles();
 
         String line;
@@ -145,6 +144,7 @@ public abstract class GeneralRepo<T> {
     }
 
     private void saveRecords(ArrayList<String> recordSet) throws Exception {
+
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(path, false))) {
             for (String rec : recordSet) {
                 bw.append(rec);

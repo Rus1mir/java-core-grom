@@ -1,38 +1,32 @@
 package lesson35.repository;
 
 import lesson35.exception.DataFormatErrorException;
+import lesson35.exception.ReferenceException;
 import lesson35.model.Order;
-
-import java.util.Random;
+import lesson35.model.Room;
+import lesson35.model.User;
 
 public class OrderRepository extends GeneralRepo<Order> {
 
-    private UserRepository userRepo = new UserRepository();
-    private RoomRepository roomRepo = new RoomRepository();
-
     public OrderRepository() {
-        super.path = "C:/javaExercises/project/OrderDb.txt";
-    }
-
-    private final String PATH = "D:/OrderDb.txt";
-
-    public Order addOrder(Order order) throws Exception {
-
-        order.setId(Math.abs(new Random().nextLong()));
-        return save(order);
-    }
-
-    public void deleteOrder(Long orderId) throws Exception{
-        deleteRecordById(orderId);
+        super("C:/javaExercises/project/OrderDb.txt", 6);
     }
 
     @Override
-    protected Order createObjFromFields(String[] fields) throws Exception {
-        //validateFields(fields);
+    protected Order mapping(String[] fields) throws Exception {
+
+        User user = new UserRepository().getObjectByID(Long.parseLong(fields[1]));
+
+        if (user == null) throw new ReferenceException("User with id " + fields[1] + " was no found in UserDB");
+
+        Room room = new RoomRepository().getObjectByID(Long.parseLong(fields[2]));
+
+        if (room == null) throw new ReferenceException("Room with id " + fields[2] + " was no found in RoomDB");
+
         try {
             return new Order(Long.parseLong(fields[0]),
-                    userRepo.getObjectById(Long.parseLong(fields[1])),
-                    roomRepo.getObjectById(Long.parseLong(fields[2])),
+                    user,
+                    room,
                     DATE_FORMAT.parse(fields[3]),
                     DATE_FORMAT.parse(fields[4]),
                     Double.parseDouble(fields[5]));
@@ -42,12 +36,5 @@ public class OrderRepository extends GeneralRepo<Order> {
         }
     }
 
-    @Override
-    protected void validateFields(String[] fields) throws Exception {
-
-        for(String f : fields) {
-            if (f.trim().equals(""))
-                throw new DataFormatErrorException("Empty fields detected");
-        }
-    }
+    protected void checkReferences(Order object) {}
 }
