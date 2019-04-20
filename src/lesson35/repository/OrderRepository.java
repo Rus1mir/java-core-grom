@@ -36,5 +36,6 @@ public class OrderRepository extends GeneralRepo<Order> {
         }
     }
 
-    protected void checkReferences(Order object) {}
+    protected void checkReferences(Order object) {
+    }
 }

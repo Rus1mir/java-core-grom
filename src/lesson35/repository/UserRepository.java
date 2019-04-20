@@ -24,6 +24,10 @@ public class UserRepository extends GeneralRepo<User> {
         return (loginedUser != null && loginedUser.getUserType() == User.UserType.ADMIN);
     }
 
+    public static User getLoginedUser() {
+        return loginedUser;
+    }
+
     public void login(User user) {
 
         if (loginedUser != null && user.getId() == loginedUser.getId()) {
