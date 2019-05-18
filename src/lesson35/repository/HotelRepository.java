@@ -18,7 +18,7 @@ public class HotelRepository extends GeneralRepo<Hotel> {
 
         ArrayList<Hotel> res = new ArrayList<>();
 
-        for(Hotel h : getObjectsFromDb()){
+        for (Hotel h : getAllObjectsFromDb()) {
 
             if (h.getName().equals(name))
                 res.add(h);
@@ -30,7 +30,7 @@ public class HotelRepository extends GeneralRepo<Hotel> {
 
         ArrayList<Hotel> res = new ArrayList<>();
 
-        for(Hotel h : getObjectsFromDb()){
+        for (Hotel h : getAllObjectsFromDb()) {
 
             if (h.getCity().equals(city))
                 res.add(h);
@@ -49,15 +49,15 @@ public class HotelRepository extends GeneralRepo<Hotel> {
     }
 
     @Override
-    protected void checkReferences(Hotel object) throws Exception {
-
-        ArrayList<Room> rooms = new RoomRepository().getObjectsFromDb();
+    public void deleteObjectById(long id) throws Exception {
+        ArrayList<Room> rooms = new RoomRepository().getAllObjectsFromDb();
 
         for (Room room : rooms) {
-            if (room.getHotel().getId() == object.getId())
-                throw new ReferenceException("Removing Hotel " + object.getId() +
+            if (room.getHotel().getId() == id)
+                throw new ReferenceException("Removing Hotel " + id +
                         " was failed cause one of some rooms still has reference to it");
         }
-        //Maybe delete this rooms looks better, but now exception only
+
+        deleteById(id);
     }
 }

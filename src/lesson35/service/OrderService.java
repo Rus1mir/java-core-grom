@@ -1,18 +1,12 @@
 package lesson35.service;
 
-import com.sun.org.apache.xpath.internal.operations.Or;
 import lesson35.exception.AccessDeniedExeption;
 import lesson35.exception.BadRequestException;
-import lesson35.model.Order;
-import lesson35.model.Room;
-import lesson35.model.User;
-import lesson35.repository.OrderRepository;
-import lesson35.repository.RoomRepository;
-import lesson35.repository.UserRepository;
+import lesson35.model.*;
+import lesson35.repository.*;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.*;
+;
 
 public class OrderService {
 
@@ -20,12 +14,14 @@ public class OrderService {
 
     public void bookRoom(long roomId, long userId, long hotelId) throws Exception {
 
-        User user = UserRepository.getLoginedUser();
+        User user = UserRepository.getLoginUser();
+
+        RoomRepository roomRepository = new RoomRepository();
 
         if (user == null || user.getId() != userId)
             throw new AccessDeniedExeption("Action not permitted for user id " + userId + ", cause this user is not login");
 
-        Room room = new RoomRepository().getObjectByID(roomId);
+        Room room = roomRepository.getObjectByID(roomId);
 
         if (room == null)
             throw new BadRequestException("Room id: " + roomId + " was not found in database, booking filed");
@@ -49,13 +45,14 @@ public class OrderService {
         Order order = new Order(-1, user, room,
                 dateBookingFrom, dateBookingTo, room.getPrice() * daysAmount);
 
+        roomRepository.changeAvailableDate(roomId, dateBookingTo);
+
         orderRepository.addObjectToDb(order);
     }
 
-
     public void cancelReservation(long roomId, long userId) throws Exception {
 
-        User user = UserRepository.getLoginedUser();
+        User user = UserRepository.getLoginUser();
 
         RoomRepository roomRepository = new RoomRepository();
 
@@ -67,15 +64,13 @@ public class OrderService {
         if (room == null)
             throw new BadRequestException("Room id: " + roomId + " was not found in database, cancel reservation filed");
 
-        for (Order ord : orderRepository.getObjectsFromDb()) {
+        for (Order ord : orderRepository.getAllObjectsFromDb()) {
 
             if (ord.getUser().getId() == userId && ord.getRoom().getId() == roomId) {
 
-                room.setDateAvailableFrom(new Date());
-                roomRepository.deleteObjectByID(roomId);
-                roomRepository.addObjectToDb(room);
+                roomRepository.changeAvailableDate(roomId, new Date());
 
-                orderRepository.deleteObjectByID(ord.getId());
+                orderRepository.deleteObjectById(ord.getId());
                 return;
             }
         }

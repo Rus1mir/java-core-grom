@@ -5,6 +5,8 @@ import java.util.Random;
 public abstract class Entity {
     protected long id;
 
+    public Entity() { }
+
     public Entity(long id) {
         this.id = id;
     }

@@ -41,6 +41,6 @@ public class HotelService {
         if (!UserRepository.isAdmin())
             throw new AccessDeniedExeption("Action not permitted for users without admins writes, please login as Admin");
 
-        hotelRepository.deleteObjectByID(hotelId);
+        hotelRepository.deleteObjectById(hotelId);
     }
 }

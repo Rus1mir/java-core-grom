@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public abstract class GeneralRepo<T extends Entity> {
 
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("DD-MM-YYYY");
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
     private String path;
     private int fieldsCount;
 
@@ -26,7 +26,7 @@ public abstract class GeneralRepo<T extends Entity> {
 
         validateFields(line.split(","));
 
-        data.generateId();
+        if (data.getId() <= 0) data.generateId();
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(path, true))) {
             bw.append(data.toString());
@@ -37,74 +37,73 @@ public abstract class GeneralRepo<T extends Entity> {
         return data;
     }
 
-    public ArrayList<T> getObjectsFromDb() throws Exception {
+    public ArrayList<T> getAllObjectsFromDb() throws Exception {
+
+        validateFiles();
 
         ArrayList<T> objects = new ArrayList<>();
 
-        for (String rec : getRecords()) {
+        String line;
 
-            String[] fields = rec.split(",");
-            validateFields(fields);
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
 
-            objects.add(mapping(fields));
+            while ((line = br.readLine()) != null) {
+                objects.add(mapping(line.split(",")));
+            }
+        } catch (IOException e) {
+            throw new IOException("Can't read file: " + path, e);
         }
         return objects;
     }
 
     public T getObjectByID(long id) throws Exception {
-        validateFiles();
 
-        String line;
+        //Упростил выборку по id
+        for (T o : getAllObjectsFromDb()) {
 
-        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
-            while ((line = br.readLine()) != null) {
-
-                String[] fields = line.split(",");
-
-                validateFields(fields);
-
-                T obj = mapping(fields);
-
-                if (obj.getId() == id) return obj;
-            }
-        } catch (IOException e) {
-            throw new IOException("Can't read file: " + path, e);
+            if (o.getId() == id)
+                return o;
         }
 
-        System.out.println("No object id: " + id + " found in " + new File(path).getName());
+        System.out.println("No object id: " + id + " found in file: " + path);
         return null;
     }
 
-    public void deleteObjectByID(long id) throws Exception {
+    protected void deleteById(long id) throws Exception {
 
-        ArrayList<String> records = getRecords();
+        ArrayList<T> objects = getAllObjectsFromDb();
 
-        for (String rec : records) {
-
-            String[] fields = rec.split(",");
-            validateFields(fields);
-
-            T object = mapping(fields);
-
-            if (object.getId() == id) {
-
-                checkReferences(object);
-
-                records.remove(rec);
-                saveRecords(records);
-                return;
+        for (T o : objects) {
+            if (o.getId() == id) {
+                objects.remove(o);
+                break;
             }
         }
-        System.out.println("No object id: " + id + " found in " + new File(path).getName());
+        rewriteFile(objects);
     }
 
-    //Specific mapping of entities must be implemented
+    //Abstract methods
     protected abstract T mapping(String[] fields) throws Exception;
 
-    protected abstract void checkReferences(T object) throws Exception;
+    //Вынес метод в классы - наследники
+    public abstract void deleteObjectById(long id) throws Exception;
 
-    //Validate, may be overrated
-    protected void validateFields(String[] fields) throws Exception {
+    private void rewriteFile(ArrayList<T> objects) throws Exception {
+
+        validateFiles();
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(path, false))) {
+
+            for (T o : objects) {
+                bw.append(o.toString());
+                bw.append("\n");
+            }
+        } catch (IOException e) {
+            throw new IOException("Can't write file: " + path, e);
+        }
+    }
+
+    private void validateFields(String[] fields) throws Exception {
 
         if (fields.length != fieldsCount)
             throw new DataFormatErrorException("Number of fields is wrong, required: " + fieldsCount);
@@ -115,7 +114,6 @@ public abstract class GeneralRepo<T extends Entity> {
         }
     }
 
-    //Not public
     private void validateFiles() throws Exception {
         File file = new File(path);
 
@@ -124,34 +122,5 @@ public abstract class GeneralRepo<T extends Entity> {
         if (!file.canRead()) throw new IOException("File: " + file.getPath() + " does no permissions to read");
 
         if (!file.canWrite()) throw new IOException("File: " + file.getPath() + " does no permissions to write");
-    }
-
-    private ArrayList<String> getRecords() throws Exception {
-
-        validateFiles();
-
-        String line;
-        ArrayList<String> recordSet = new ArrayList<>();
-
-        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
-            while ((line = br.readLine()) != null) {
-                recordSet.add(line);
-            }
-        } catch (IOException e) {
-            throw new IOException("Can't read file: " + path, e);
-        }
-        return recordSet;
-    }
-
-    private void saveRecords(ArrayList<String> recordSet) throws Exception {
-
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(path, false))) {
-            for (String rec : recordSet) {
-                bw.append(rec);
-                bw.append("\n");
-            }
-        } catch (IOException e) {
-            throw new IOException("Can't write file: " + path, e);
-        }
     }
 }

@@ -33,6 +33,6 @@ public class RoomService {
         if (!UserRepository.isAdmin())
             throw new AccessDeniedExeption("Action not permitted for users without admins writes, please login as Admin");
 
-        roomRepository.deleteObjectByID(roomId);
+        roomRepository.deleteObjectById(roomId);
     }
 }

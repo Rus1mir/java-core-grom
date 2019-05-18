@@ -1,44 +1,49 @@
 package lesson35.demo;
 
+import lesson35.controller.HotelController;
 import lesson35.controller.RoomController;
 import lesson35.controller.UserController;
+import lesson35.model.Filter;
 import lesson35.model.Hotel;
 import lesson35.model.Room;
-
+import lesson35.repository.RoomRepository;
 
 import java.util.Date;
 
 public class DemoRoom {
-    public static void main(String[] args) throws Exception{
 
-        UserController userController = new UserController();
+    private static UserController userController = new UserController();
+    private static RoomController controller = new RoomController();
+    private static HotelController hotelController = new HotelController();
 
-        userController.login("Peter", "23423");
+    public static void main(String[] args) throws Exception {
+
+        userController.login("Peter", "23423"); //Admin
         //userController.login("Joann", "1234");
 
-        //findRooms();
-        //addRoom();
-        deleteRoom(7277790549578145598L);
+        //addRoom(); //tested
+        //deleteRoom(); //tested
+        //findRooms(); //tested
     }
 
-    private static void addRoom () throws Exception {
+    private static void addRoom() throws Exception {
 
-        RoomController controller = new RoomController();
-
-        Hotel hotel = new Hotel(9139656224128283922L, "Stolichny", "Ukraine", "Kyiv", "test");
+        Hotel hotel = hotelController.findHoteByName("Palace").get(0);
         Room room = new Room(-1, 1, 700, true, true, new Date(), hotel);
 
         System.out.println(controller.addRoom(room));
     }
 
-    private static void deleteRoom (long id) throws Exception{
+    private static void deleteRoom() throws Exception {
 
-        RoomController controller = new RoomController();
-        controller.deleteRoom(id);
+        controller.deleteRoom(3402247236796500472L);
     }
 
-    private static void findRooms () throws Exception {
+    private static void findRooms() throws Exception {
 
-        //TODO
+        Filter filter = new Filter(1, 700d, null,
+                null, null, "Ukraine", null);
+
+        System.out.println(controller.findRooms(filter));
     }
 }

@@ -1,12 +1,7 @@
 package lesson35.repository;
 
-import lesson35.exception.ReferenceException;
 import lesson35.exception.DataFormatErrorException;
-import lesson35.model.Order;
 import lesson35.model.User;
-
-import java.util.ArrayList;
-
 
 public class UserRepository extends GeneralRepo<User> {
 
@@ -24,18 +19,19 @@ public class UserRepository extends GeneralRepo<User> {
         return (loginedUser != null && loginedUser.getUserType() == User.UserType.ADMIN);
     }
 
-    public static User getLoginedUser() {
+    public static User getLoginUser() {
         return loginedUser;
     }
 
     public void login(User user) {
 
         if (loginedUser != null && user.getId() == loginedUser.getId()) {
-            System.out.println("User with id " + user.getId() + " was already login");
+            System.out.println("User " + user + " was already login");
             return;
         }
 
         loginedUser = user;
+        System.out.println("User " + user + " was login successfully");
     }
 
     public void logout() {
@@ -44,7 +40,7 @@ public class UserRepository extends GeneralRepo<User> {
 
     public User getUserByNameAndPass(String name, String password) throws Exception {
 
-        for (User user : getObjectsFromDb()) {
+        for (User user : getAllObjectsFromDb()) {
 
             if (user.getUserName().equals(name) && user.getPassword().equals(password))
                 return user;
@@ -63,13 +59,7 @@ public class UserRepository extends GeneralRepo<User> {
     }
 
     @Override
-    protected void checkReferences(User object) throws Exception {
-        ArrayList<Order> orders = new OrderRepository().getObjectsFromDb();
-
-        for (Order order : orders) {
-            if (order.getRoom().getId() == object.getId())
-                throw new ReferenceException("Removing User " + object.getId() +
-                        " was failed cause one of some orders still has reference to it");
-        }
+    public void deleteObjectById(long id) throws Exception {
+        deleteById(id);
     }
 }

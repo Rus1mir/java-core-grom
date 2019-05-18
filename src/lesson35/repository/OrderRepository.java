@@ -36,6 +36,8 @@ public class OrderRepository extends GeneralRepo<Order> {
         }
     }
 
-    protected void checkReferences(Order object) {
+    @Override
+    public void deleteObjectById(long id) throws Exception {
+        deleteById(id);
     }
 }

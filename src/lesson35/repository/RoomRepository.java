@@ -2,13 +2,10 @@ package lesson35.repository;
 
 import lesson35.exception.DataFormatErrorException;
 import lesson35.exception.ReferenceException;
-import lesson35.model.Filter;
-import lesson35.model.Hotel;
-import lesson35.model.Order;
-import lesson35.model.Room;
+import lesson35.model.*;
 
 import java.util.ArrayList;
-
+import java.util.Date;
 
 public class RoomRepository extends GeneralRepo<Room> {
 
@@ -18,14 +15,34 @@ public class RoomRepository extends GeneralRepo<Room> {
 
     public ArrayList<Room> findRoomsByFilter(Filter filter) throws Exception {
 
-        ArrayList<Room> rooms = getObjectsFromDb();
+        ArrayList<Room> rooms = getAllObjectsFromDb();
         ArrayList<Room> res = new ArrayList<>();
 
         for (Room r : rooms) {
-            if (filter.equals(r))
+            if (isMatchFilter(filter, r))
                 res.add(r);
         }
         return res;
+    }
+
+    public void changeAvailableDate(long id, Date newDate) throws Exception {
+
+        Room room = getObjectByID(id);
+        room.setDateAvailableFrom(newDate);
+        deleteById(id);
+        addObjectToDb(room);
+    }
+
+    //Вынес иквелс сюда по замечанию
+    private boolean isMatchFilter(Filter filter, Room room) {
+
+        return (filter.getNumberOfGuests() == null || filter.getNumberOfGuests() == room.getNumberOfGuests()) &&
+                (filter.getPrice() == null || filter.getPrice() == room.getPrice()) &&
+                (filter.getBreakfastIncluded() == null || filter.getBreakfastIncluded() == room.isBreakfastIncluded()) &&
+                (filter.getPetsAllowed() == null || filter.getPetsAllowed() == room.isPetsAllowed()) &&
+                (filter.getDateAvailableFrom() == null || filter.getDateAvailableFrom().after(room.getDateAvailableFrom())) &&
+                (filter.getCountry() == null || filter.getCountry().equals(room.getHotel().getCountry())) &&
+                (filter.getCity() == null || filter.getCity().equals(room.getHotel().getCity()));
     }
 
     @Override
@@ -49,14 +66,15 @@ public class RoomRepository extends GeneralRepo<Room> {
     }
 
     @Override
-    protected void checkReferences(Room object) throws Exception {
+    public void deleteObjectById(long id) throws Exception {
 
-        ArrayList<Order> orders = new OrderRepository().getObjectsFromDb();
+        ArrayList<Order> orders = new OrderRepository().getAllObjectsFromDb();
 
         for (Order order : orders) {
-            if (order.getRoom().getId() == object.getId())
-                throw new ReferenceException("Removing Room " + object.getId() +
+            if (order.getRoom().getId() == id)
+                throw new ReferenceException("Removing Room " + id +
                         " was failed cause one of some orders still has reference to it");
         }
+        deleteById(id);
     }
 }

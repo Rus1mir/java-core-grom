@@ -1,7 +1,6 @@
 package lesson35.service;
 
-import lesson35.exception.UserAlreadyExistException;
-import lesson35.exception.UserNotFoundException;
+import lesson35.exception.BadRequestException;
 import lesson35.model.User;
 import lesson35.repository.UserRepository;
 
@@ -11,8 +10,9 @@ public class UserService {
 
     public User registerUser(User user) throws Exception {
 
+        //Поправил эксепшн по замечанию
         if (userRepository.getUserByNameAndPass(user.getUserName(), user.getPassword()) != null)
-                throw new UserAlreadyExistException("User with equal name and password already exists. Register not possible");
+                throw new BadRequestException("User with equal name and password already exists. Register not possible");
 
         return userRepository.addObjectToDb(user);
     }
@@ -21,8 +21,9 @@ public class UserService {
 
         User existingUser = userRepository.getUserByNameAndPass(userName, password);
 
+        //Поправил эксепшн по замечанию
         if (existingUser == null)
-            throw new UserNotFoundException("User with name " + userName + " was not currently registered login failed");
+            throw new BadRequestException("User with name " + userName + " was not currently registered login failed");
 
        userRepository.login(existingUser);
     }
